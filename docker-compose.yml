@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   mongo:
@@ -6,7 +6,7 @@ services:
     container_name: mploychek_mongo
     restart: always
     ports:
-      - '27017:27017'
+      - "27017:27017"
     volumes:
       - mongo_data:/data/db
     networks:
@@ -19,7 +19,7 @@ services:
     container_name: mploychek_backend
     restart: always
     ports:
-      - '3000:3000'
+      - "3000:3000"
     environment:
       - PORT=3000
       - MONGO_URI=mongodb://mongo:27017/mploychek
@@ -30,6 +30,19 @@ services:
       - NODE_ENV=development
     depends_on:
       - mongo
+    networks:
+      - mploychek_network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: mploychek_frontend
+    restart: always
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
     networks:
       - mploychek_network
 
