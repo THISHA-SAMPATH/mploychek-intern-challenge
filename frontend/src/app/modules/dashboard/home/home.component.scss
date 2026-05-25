@@ -1,0 +1,195 @@
+.home-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.stat-card {
+  mat-card-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px !important;
+  }
+
+  .stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    mat-icon {
+      font-size: 24px;
+      color: white;
+    }
+  }
+
+  .stat-info {
+    display: flex;
+    flex-direction: column;
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: #666;
+      margin-top: 4px;
+    }
+  }
+
+  &.total .stat-icon {
+    background: #1976d2;
+  }
+  &.verified .stat-icon {
+    background: #388e3c;
+  }
+  &.pending .stat-icon {
+    background: #5f6f89;
+  }
+  &.flagged .stat-icon {
+    background: #d32f2f;
+  }
+}
+
+.table-card {
+  mat-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 16px 0;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    mat-card-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 18px;
+    }
+
+    .table-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .delay-select {
+        width: 160px;
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+.records-table {
+  width: 100%;
+
+  th {
+    font-weight: 600;
+    color: #333;
+  }
+
+  .record-id {
+    font-family: monospace;
+    font-weight: 600;
+    color: #1976d2;
+  }
+
+  .type-badge {
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .status-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+
+    mat-icon {
+      font-size: 14px;
+      width: 14px;
+      height: 14px;
+    }
+
+    &.status-verified {
+      background: #e8f5e9;
+      color: #388e3c;
+    }
+    &.status-pending {
+      background: #eef2f7;
+      color: #5f6f89;
+    }
+    &.status-inreview {
+      background: #e3f2fd;
+      color: #1976d2;
+    }
+    &.status-flagged {
+      background: #ffebee;
+      color: #d32f2f;
+    }
+  }
+}
+
+.loading-state {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .skeleton {
+    height: 48px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px;
+  color: #999;
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+  }
+  p {
+    margin-top: 12px;
+  }
+}

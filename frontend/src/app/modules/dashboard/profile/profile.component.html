@@ -1,0 +1,108 @@
+<div class="profile-container">
+  @if (isLoading()) {
+    <div class="loading">Loading profile...</div>
+  }
+
+  @if (!isLoading() && user()) {
+    <div class="profile-grid">
+      <!-- Profile Card -->
+      <mat-card class="profile-card">
+        <mat-card-content>
+          <div class="avatar">
+            {{ getInitials(user()!.name) }}
+          </div>
+          <h2 class="user-name">{{ user()!.name }}</h2>
+          <p class="user-id">{{ user()!.userId }}</p>
+
+          <div class="role-badge" [class]="user()!.role === 'Admin' ? 'admin' : 'user'">
+            <mat-icon>{{ user()!.role === 'Admin' ? 'admin_panel_settings' : 'person' }}</mat-icon>
+            {{ user()!.role }}
+          </div>
+
+          <mat-divider class="divider"></mat-divider>
+
+          <div class="info-row">
+            <mat-icon>email</mat-icon>
+            <span>{{ user()!.email }}</span>
+          </div>
+          <div class="info-row">
+            <mat-icon>business</mat-icon>
+            <span>{{ user()!.department }}</span>
+          </div>
+          <div class="info-row">
+            <mat-icon>calendar_today</mat-icon>
+            <span>Joined {{ user()!.createdAt | date: 'mediumDate' }}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Verification Status Card -->
+      <div class="right-column">
+        <mat-card class="status-card">
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>verified_user</mat-icon>
+              Verification Status
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="status-display">
+              <span
+                class="status-badge"
+                [style.background]="getStatusColor(user()!.verificationStatus) + '20'"
+                [style.color]="getStatusColor(user()!.verificationStatus)"
+              >
+                {{ user()!.verificationStatus }}
+              </span>
+            </div>
+
+            <div class="progress-section">
+              <div class="progress-label">
+                <span>Verification Progress</span>
+                <span>{{ getVerificationProgress(user()!.verificationStatus) }}%</span>
+              </div>
+              <mat-progress-bar
+                mode="determinate"
+                [value]="getVerificationProgress(user()!.verificationStatus)"
+                [color]="user()!.verificationStatus === 'Flagged' ? 'warn' : 'primary'"
+              ></mat-progress-bar>
+            </div>
+
+            <div class="pipeline">
+              @for (step of ['Pending', 'InReview', 'Verified']; track step) {
+                <div
+                  class="step"
+                  [class.active]="user()!.verificationStatus === step"
+                  [class.done]="
+                    getVerificationProgress(user()!.verificationStatus) >
+                    getVerificationProgress(step)
+                  "
+                >
+                  <div class="step-dot"></div>
+                  <span>{{ step }}</span>
+                </div>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="account-card">
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>security</mat-icon>
+              Account Status
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="account-status">
+              <mat-icon [style.color]="user()!.isActive ? '#388e3c' : '#d32f2f'">
+                {{ user()!.isActive ? 'check_circle' : 'cancel' }}
+              </mat-icon>
+              <span>Account is {{ user()!.isActive ? 'Active' : 'Inactive' }}</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  }
+</div>
