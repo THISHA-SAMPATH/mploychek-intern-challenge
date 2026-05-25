@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: mploychek_mongo
+    restart: always
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - mploychek_network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: mploychek_backend
+    restart: always
+    ports:
+      - '3000:3000'
+    environment:
+      - PORT=3000
+      - MONGO_URI=mongodb://mongo:27017/mploychek
+      - JWT_SECRET=mploychek_super_secret_key_2026
+      - JWT_EXPIRES_IN=15m
+      - JWT_REFRESH_SECRET=mploychek_refresh_secret_2026
+      - JWT_REFRESH_EXPIRES_IN=7d
+      - NODE_ENV=development
+    depends_on:
+      - mongo
+    networks:
+      - mploychek_network
+
+volumes:
+  mongo_data:
+
+networks:
+  mploychek_network:
+    driver: bridge
