@@ -1,0 +1,77 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav mode="side" opened class="sidenav">
+    <div class="sidenav-header">
+      <span class="logo-icon">✓</span>
+      <span class="logo-text">MPloyChek</span>
+    </div>
+
+    <mat-nav-list>
+      <a mat-list-item routerLink="home" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>dashboard</mat-icon>
+        <span matListItemTitle>Dashboard</span>
+      </a>
+      <a mat-list-item routerLink="profile" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>person</mat-icon>
+        <span matListItemTitle>My Profile</span>
+      </a>
+      @if (authService.isAdmin()) {
+        <a mat-list-item routerLink="admin" routerLinkActive="active-link">
+          <mat-icon matListItemIcon>admin_panel_settings</mat-icon>
+          <span matListItemTitle>Admin Panel</span>
+        </a>
+      }
+    </mat-nav-list>
+
+    <div class="sidenav-footer">
+      <button mat-list-item (click)="logout()" class="logout-btn">
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </button>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar class="toolbar">
+      <span class="toolbar-title">
+        Welcome, {{ authService.currentUser()?.name }}
+      </span>
+      <span class="spacer"></span>
+
+      <button mat-icon-button (click)="themeService.toggleTheme()">
+        <mat-icon>{{ themeService.isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
+
+      <button mat-icon-button [matMenuTriggerFor]="notifMenu">
+        <mat-icon [matBadge]="notifications.length || null" matBadgeColor="warn">
+          notifications
+        </mat-icon>
+      </button>
+
+      <mat-menu #notifMenu="matMenu">
+        @if (notifications.length === 0) {
+          <p class="no-notif">No notifications</p>
+        }
+        @for (n of notifications; track n) {
+          <button mat-menu-item>{{ n }}</button>
+        }
+      </mat-menu>
+
+      <button mat-icon-button [matMenuTriggerFor]="userMenu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item routerLink="profile">
+          <mat-icon>person</mat-icon> Profile
+        </button>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon> Logout
+        </button>
+      </mat-menu>
+    </mat-toolbar>
+
+    <div class="content">
+      <router-outlet />
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

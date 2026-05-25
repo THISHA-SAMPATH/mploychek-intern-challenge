@@ -1,0 +1,107 @@
+<div class="login-container">
+  <div class="login-card">
+
+    <div class="login-header">
+      <div class="logo">
+        <span class="logo-icon">✓</span>
+        <span class="logo-text">MPloyChek</span>
+      </div>
+      <h1>Welcome Back</h1>
+      <p>Sign in to your verification portal</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>User ID</mat-label>
+        <input matInput formControlName="userId" placeholder="e.g. USR001" />
+        <mat-icon matPrefix>badge</mat-icon>
+        @if (loginForm.get('userId')?.hasError('required') && loginForm.get('userId')?.touched) {
+          <mat-error>User ID is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          formControlName="password"
+          [type]="hidePassword() ? 'password' : 'text'"
+          placeholder="Enter your password"
+        />
+        <mat-icon matPrefix>lock</mat-icon>
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="hidePassword.set(!hidePassword())"
+        >
+          <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        @if (loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched) {
+          <mat-error>Password is required</mat-error>
+        }
+        @if (loginForm.get('password')?.hasError('minlength') && loginForm.get('password')?.touched) {
+          <mat-error>Password must be at least 6 characters</mat-error>
+        }
+      </mat-form-field>
+
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        class="submit-btn"
+        [disabled]="loginForm.invalid || isLoading()"
+      >
+        @if (isLoading()) {
+          <mat-spinner diameter="20"></mat-spinner>
+          <span>Signing in...</span>
+        } @else {
+          <span>Sign In</span>
+        }
+      </button>
+
+    </form>
+
+    <div class="demo-section">
+      <p class="demo-label">Quick Demo Access</p>
+      <div class="demo-buttons">
+        <button mat-stroked-button (click)="fillDemo('admin')" class="demo-btn admin">
+          <mat-icon>admin_panel_settings</mat-icon>
+          Admin User
+        </button>
+        <button mat-stroked-button (click)="fillDemo('user')" class="demo-btn user">
+          <mat-icon>person</mat-icon>
+          General User
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="login-side">
+    <div class="side-content">
+      <h2>Digital Background Verification</h2>
+      <p>Streamlined, secure, and intelligent verification for modern enterprises.</p>
+      <div class="features">
+        <div class="feature">
+          <span class="feature-icon">🔍</span>
+          <span>Identity Verification</span>
+        </div>
+        <div class="feature">
+          <span class="feature-icon">💼</span>
+          <span>Employment History</span>
+        </div>
+        <div class="feature">
+          <span class="feature-icon">🎓</span>
+          <span>Education Records</span>
+        </div>
+        <div class="feature">
+          <span class="feature-icon">⚖️</span>
+          <span>Criminal Background</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

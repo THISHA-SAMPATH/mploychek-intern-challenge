@@ -1,0 +1,106 @@
+.sidenav-container {
+  height: 100vh;
+}
+
+.sidenav {
+  width: 240px;
+  background: #1a1a2e;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidenav-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 24px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+
+  .logo-icon {
+    width: 32px;
+    height: 32px;
+    background: #1976d2;
+    color: white;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+  }
+
+  .logo-text {
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+  }
+}
+
+mat-nav-list {
+  flex: 1;
+  padding-top: 8px;
+
+  a {
+    color: rgba(255,255,255,0.7) !important;
+    border-radius: 8px;
+    margin: 2px 8px;
+
+    &.active-link {
+      background: rgba(25, 118, 210, 0.3) !important;
+      color: white !important;
+    }
+
+    mat-icon {
+      color: inherit;
+    }
+  }
+}
+
+.sidenav-footer {
+  padding: 16px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+
+  .logout-btn {
+    width: 100%;
+    color: rgba(255,255,255,0.7);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 8px;
+    border-radius: 8px;
+
+    &:hover {
+      background: rgba(255,255,255,0.1);
+    }
+  }
+}
+
+.toolbar {
+  background: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  .toolbar-title {
+    font-weight: 600;
+    color: #1a1a2e;
+  }
+
+  .spacer { flex: 1; }
+}
+
+.content {
+  padding: 24px;
+  background: #f5f5f5;
+  min-height: calc(100vh - 64px);
+}
+
+.no-notif {
+  padding: 16px;
+  color: #999;
+  margin: 0;
+}
