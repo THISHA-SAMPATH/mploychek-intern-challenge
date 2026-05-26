@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,14 +15,17 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { UserService } from '../../../core/services/user.service';
 import { RecordService } from '../../../core/services/record.service';
+import { DocumentService } from '../../../core/services/document.service';
 import { User } from '../../../core/models/user.model';
 import { AuditLog } from '../../../core/models/audit.model';
+import { DocumentStatus, VerificationDocument } from '../../../core/models/document.model';
 
 @Component({
   selector: 'app-admin',
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     MatTableModule,
     MatCardModule,
@@ -43,9 +46,11 @@ import { AuditLog } from '../../../core/models/audit.model';
 export class AdminComponent implements OnInit {
   users = signal<User[]>([]);
   auditLogs = signal<AuditLog[]>([]);
+  documents = signal<VerificationDocument[]>([]);
   isLoading = signal(false);
   isCreating = signal(false);
   showCreateForm = signal(false);
+  reviewRemarks: Record<string, string> = {};
 
   userColumns = ['userId', 'name', 'email', 'role', 'department', 'status', 'active', 'actions'];
   auditColumns = ['timestamp', 'action', 'performedBy', 'targetUserId', 'details'];
@@ -55,6 +60,7 @@ export class AdminComponent implements OnInit {
   constructor(
     private userService: UserService,
     private recordService: RecordService,
+    private documentService: DocumentService,
     private snackBar: MatSnackBar,
     private fb: FormBuilder
   ) {
@@ -71,6 +77,7 @@ export class AdminComponent implements OnInit {
   ngOnInit(): void {
     this.loadUsers();
     this.loadAuditLogs();
+    this.loadDocuments();
   }
 
   loadUsers(): void {
@@ -84,6 +91,12 @@ export class AdminComponent implements OnInit {
   loadAuditLogs(): void {
     this.recordService.getAuditLogs().subscribe({
       next: (res) => this.auditLogs.set(res.logs),
+    });
+  }
+
+  loadDocuments(): void {
+    this.documentService.getDocuments().subscribe({
+      next: (res) => this.documents.set(res.documents),
     });
   }
 
@@ -103,10 +116,41 @@ export class AdminComponent implements OnInit {
         this.showCreateForm.set(false);
         this.loadUsers();
         this.loadAuditLogs();
+        this.loadDocuments();
       },
       error: (err) => {
         this.isCreating.set(false);
         this.snackBar.open(err.error?.message || 'Failed to create user', 'Close', { duration: 3000 });
+      },
+    });
+  }
+
+  reviewDocument(documentId: string, status: DocumentStatus): void {
+    const adminRemarks = this.reviewRemarks[documentId] || '';
+    this.documentService.reviewDocument(documentId, status, adminRemarks).subscribe({
+      next: () => {
+        this.snackBar.open(`Document marked ${status}`, 'Close', { duration: 2500 });
+        this.reviewRemarks[documentId] = '';
+        this.loadDocuments();
+        this.loadUsers();
+        this.loadAuditLogs();
+      },
+      error: (err) => {
+        this.snackBar.open(err.error?.message || 'Review failed', 'Close', { duration: 3000 });
+      },
+    });
+  }
+
+  downloadDocument(documentId: string): void {
+    this.documentService.getDocument(documentId).subscribe({
+      next: (doc) => {
+        const link = document.createElement('a');
+        link.href = doc.fileData || '';
+        link.download = doc.fileName;
+        link.click();
+      },
+      error: () => {
+        this.snackBar.open('Unable to download document', 'Close', { duration: 3000 });
       },
     });
   }
@@ -144,5 +188,19 @@ export class AdminComponent implements OnInit {
 
   getRoleLabel(role: string): string {
     return role === 'GeneralUser' ? 'General User' : role;
+  }
+
+  getUserName(userId: string): string {
+    return this.users().find((user) => user.userId === userId)?.name || userId;
+  }
+
+  getDocumentStatusIcon(status: string): string {
+    const icons: Record<string, string> = {
+      Uploaded: 'upload_file',
+      'Under Review': 'rate_review',
+      Approved: 'verified',
+      Rejected: 'cancel',
+    };
+    return icons[status] || 'description';
   }
 }

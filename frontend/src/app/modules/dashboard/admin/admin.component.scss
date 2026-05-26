@@ -100,6 +100,149 @@
   overflow-x: auto;
 }
 
+.review-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  overflow: visible;
+}
+
+.review-card {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid rgba(24, 24, 27, 0.08);
+  border-radius: 12px;
+  background: #ffffff;
+
+  header {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+
+    h3 {
+      margin: 0;
+      color: #18181b;
+      font-size: 16px;
+    }
+
+    p {
+      margin: 3px 0 0;
+      color: #71717a;
+      font-size: 13px;
+    }
+
+    span {
+      padding: 6px 11px;
+      border-radius: 999px;
+      color: #18181b;
+      background: #f4f4f5;
+      font-size: 12px;
+      font-weight: 800;
+    }
+  }
+
+  .review-icon {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    color: #0879c4;
+    border-radius: 10px;
+    background: rgba(14, 146, 235, 0.1);
+  }
+
+  dl {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin: 0;
+
+    div {
+      min-width: 0;
+      padding: 10px;
+      border-radius: 8px;
+      background: #fafafa;
+    }
+
+    dt {
+      color: #71717a;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    dd {
+      margin: 4px 0 0;
+      color: #27272a;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  textarea {
+    width: 100%;
+    resize: vertical;
+    border: 1px solid #d4d4d8;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font: inherit;
+  }
+
+  &.doc-approved header span {
+    color: #047857;
+    background: rgba(16, 185, 129, 0.12);
+  }
+
+  &.doc-rejected header span {
+    color: #c0266d;
+    background: rgba(217, 26, 117, 0.11);
+  }
+}
+
+.review-note {
+  margin: 0;
+  padding: 10px 12px;
+  color: #52525b;
+  border-radius: 8px;
+  background: #f4f4f5;
+
+  &.admin-note {
+    color: #7c2d12;
+    background: #fff7ed;
+  }
+}
+
+.review-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  button {
+    border-radius: 8px;
+  }
+
+  .approve-btn {
+    color: #ffffff !important;
+    background: #047857 !important;
+  }
+
+  .reject-btn {
+    color: #ffffff !important;
+    background: #c0266d !important;
+  }
+}
+
+.empty-review {
+  min-height: 150px;
+  grid-column: 1 / -1;
+  display: grid;
+  place-items: center;
+  gap: 8px;
+  color: #71717a;
+  text-align: center;
+}
+
 :host ::ng-deep {
   .admin-tabs .mat-mdc-tab-header {
     border-bottom: 1px solid rgba(24, 24, 27, 0.08);
@@ -161,24 +304,60 @@
   }
 
   .status-select {
-    min-width: 108px;
-    font-size: 13px;
+    width: 128px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 10px 0 0;
+    border-radius: 999px;
+    background: #f8fafc;
+
+    ::ng-deep .mat-mdc-select-trigger {
+      height: 34px;
+      display: flex;
+      align-items: center;
+    }
+
+    ::ng-deep .mat-mdc-select-value {
+      display: flex;
+      align-items: center;
+      overflow: visible;
+    }
+
+    ::ng-deep .mat-mdc-select-arrow-wrapper {
+      transform: none;
+    }
+  }
+
+  .status-pill {
+    min-width: 86px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
     font-weight: 800;
+    line-height: 1;
 
     &.verified {
       color: #047857;
+      background: rgba(16, 185, 129, 0.12);
     }
 
     &.pending {
       color: #52525b;
+      background: rgba(113, 113, 122, 0.13);
     }
 
     &.inreview {
       color: #0879c4;
+      background: rgba(14, 146, 235, 0.12);
     }
 
     &.flagged {
       color: #c0266d;
+      background: rgba(217, 26, 117, 0.11);
     }
   }
 
@@ -190,6 +369,49 @@
   }
 }
 
+::ng-deep .status-select-panel {
+  min-width: 150px !important;
+
+  .mat-mdc-option {
+    min-height: 42px;
+  }
+
+  .mdc-list-item__primary-text {
+    width: 100%;
+  }
+
+  .status-option {
+    display: inline-flex;
+    min-width: 86px;
+    justify-content: center;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1;
+
+    &.verified {
+      color: #047857;
+      background: rgba(16, 185, 129, 0.12);
+    }
+
+    &.pending {
+      color: #52525b;
+      background: rgba(113, 113, 122, 0.13);
+    }
+
+    &.inreview {
+      color: #0879c4;
+      background: rgba(14, 146, 235, 0.12);
+    }
+
+    &.flagged {
+      color: #c0266d;
+      background: rgba(217, 26, 117, 0.11);
+    }
+  }
+}
+
 @media (max-width: 900px) {
   .admin-header {
     align-items: flex-start;
@@ -197,6 +419,10 @@
   }
 
   .create-form-card .create-form {
+    grid-template-columns: 1fr;
+  }
+
+  .review-grid {
     grid-template-columns: 1fr;
   }
 }

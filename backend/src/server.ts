@@ -9,6 +9,7 @@ import seedData from "./config/seed";
 import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
 import recordRoutes from "./routes/record.routes";
+import documentRoutes from "./routes/document.routes";
 
 dotenv.config();
 
@@ -44,13 +45,14 @@ app.use(
   }),
 );
 
-app.use(express.json());
+app.use(express.json({ limit: "8mb" }));
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/records", recordRoutes);
+app.use("/api/documents", documentRoutes);
 
 // Health check
 app.get("/api/health", (req, res) => {

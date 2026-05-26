@@ -161,4 +161,67 @@
       </mat-card-content>
     }
   </mat-card>
+
+  <mat-card class="documents-card premium-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>upload_file</mat-icon>
+        My Documents
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      @if (!authService.isAdmin()) {
+        <div class="upload-panel">
+          <mat-form-field appearance="outline">
+            <mat-label>Document Type</mat-label>
+            <mat-select [(ngModel)]="selectedDocumentType">
+              @for (type of documentTypes; track type) {
+                <mat-option [value]="type">{{ type }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <label class="file-picker">
+            <mat-icon>attach_file</mat-icon>
+            <span>{{ selectedFile?.name || 'Choose file' }}</span>
+            <input type="file" accept=".pdf,.png,.jpg,.jpeg" (change)="onFileSelected($event)" />
+          </label>
+
+          <textarea
+            [(ngModel)]="userRemarks"
+            rows="3"
+            placeholder="Optional note for admin"
+          ></textarea>
+
+          <button mat-flat-button type="button" (click)="uploadDocument()" [disabled]="isUploading()">
+            <mat-icon>{{ isUploading() ? 'hourglass_top' : 'cloud_upload' }}</mat-icon>
+            {{ isUploading() ? 'Uploading...' : 'Upload Document' }}
+          </button>
+        </div>
+      }
+
+      <div class="document-list">
+        @for (doc of documents(); track doc.documentId) {
+          <div class="document-row" [class]="'doc-' + doc.status.toLowerCase().replace(' ', '-')">
+            <div class="document-icon">
+              <mat-icon>{{ getDocumentStatusIcon(doc.status) }}</mat-icon>
+            </div>
+            <div class="document-main">
+              <strong>{{ doc.documentType }}</strong>
+              <span>{{ doc.fileName }} · {{ doc.createdAt | date: 'mediumDate' }}</span>
+              @if (doc.adminRemarks) {
+                <small>{{ doc.adminRemarks }}</small>
+              }
+            </div>
+            <span class="document-status">{{ doc.status }}</span>
+          </div>
+        } @empty {
+          <div class="empty-documents">
+            <mat-icon>folder_open</mat-icon>
+            <span>No documents uploaded yet</span>
+          </div>
+        }
+      </div>
+    </mat-card-content>
+  </mat-card>
 </div>

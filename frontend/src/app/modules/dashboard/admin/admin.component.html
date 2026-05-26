@@ -61,6 +61,73 @@
   }
 
   <mat-tab-group class="admin-tabs premium-card">
+    <mat-tab label="Document Review">
+      <div class="tab-content review-grid">
+        @for (doc of documents(); track doc.documentId) {
+          <article class="review-card" [class]="'doc-' + doc.status.toLowerCase().replace(' ', '-')">
+            <header>
+              <div class="review-icon">
+                <mat-icon>{{ getDocumentStatusIcon(doc.status) }}</mat-icon>
+              </div>
+              <div>
+                <h3>{{ doc.documentType }}</h3>
+                <p>{{ getUserName(doc.userId) }} · {{ doc.userId }}</p>
+              </div>
+              <span>{{ doc.status }}</span>
+            </header>
+
+            <dl>
+              <div>
+                <dt>File</dt>
+                <dd>{{ doc.fileName }}</dd>
+              </div>
+              <div>
+                <dt>Uploaded</dt>
+                <dd>{{ doc.createdAt | date: 'mediumDate' }}</dd>
+              </div>
+            </dl>
+
+            @if (doc.userRemarks) {
+              <p class="review-note">{{ doc.userRemarks }}</p>
+            }
+            @if (doc.adminRemarks) {
+              <p class="review-note admin-note">{{ doc.adminRemarks }}</p>
+            }
+
+            <textarea
+              [(ngModel)]="reviewRemarks[doc.documentId]"
+              rows="3"
+              placeholder="Admin remarks"
+            ></textarea>
+
+            <div class="review-actions">
+              <button mat-stroked-button type="button" (click)="downloadDocument(doc.documentId)">
+                <mat-icon>download</mat-icon>
+                View File
+              </button>
+              <button mat-stroked-button type="button" (click)="reviewDocument(doc.documentId, 'Under Review')">
+                <mat-icon>rate_review</mat-icon>
+                Review
+              </button>
+              <button mat-flat-button type="button" class="approve-btn" (click)="reviewDocument(doc.documentId, 'Approved')">
+                <mat-icon>check_circle</mat-icon>
+                Approve
+              </button>
+              <button mat-flat-button type="button" class="reject-btn" (click)="reviewDocument(doc.documentId, 'Rejected')">
+                <mat-icon>cancel</mat-icon>
+                Reject
+              </button>
+            </div>
+          </article>
+        } @empty {
+          <div class="empty-review">
+            <mat-icon>inventory_2</mat-icon>
+            <span>No documents waiting for review</span>
+          </div>
+        }
+      </div>
+    </mat-tab>
+
     <!-- Users Tab -->
     <mat-tab label="Users">
       <div class="tab-content">
@@ -103,12 +170,26 @@
                 [value]="u.verificationStatus"
                 (selectionChange)="updateStatus(u.userId, $event.value)"
                 class="status-select"
+                panelClass="status-select-panel"
                 [class]="getStatusColor(u.verificationStatus)"
               >
-                <mat-option value="Pending">Pending</mat-option>
-                <mat-option value="InReview">InReview</mat-option>
-                <mat-option value="Verified">Verified</mat-option>
-                <mat-option value="Flagged">Flagged</mat-option>
+                <mat-select-trigger>
+                  <span class="status-pill" [class]="getStatusColor(u.verificationStatus)">
+                    {{ u.verificationStatus }}
+                  </span>
+                </mat-select-trigger>
+                <mat-option value="Pending">
+                  <span class="status-option pending">Pending</span>
+                </mat-option>
+                <mat-option value="InReview">
+                  <span class="status-option inreview">InReview</span>
+                </mat-option>
+                <mat-option value="Verified">
+                  <span class="status-option verified">Verified</span>
+                </mat-option>
+                <mat-option value="Flagged">
+                  <span class="status-option flagged">Flagged</span>
+                </mat-option>
               </mat-select>
             </td>
           </ng-container>
