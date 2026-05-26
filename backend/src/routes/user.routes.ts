@@ -5,6 +5,11 @@ import { protect, adminOnly } from "../middleware/auth.middleware";
 
 const router = Router();
 
+const normalizeRole = (role: string | undefined): "Admin" | "GeneralUser" => {
+  if (role === "Admin") return "Admin";
+  return "GeneralUser";
+};
+
 // GET /api/users — Admin: get all users
 router.get(
   "/",
@@ -64,7 +69,7 @@ router.post(
         name,
         email,
         password,
-        role: role || "GeneralUser",
+        role: normalizeRole(role),
         department,
         verificationStatus: "Pending",
         isActive: true,

@@ -5,6 +5,12 @@ import AuditLog from "../models/auditlog.model";
 
 const router = Router();
 
+const normalizeRole = (role: string): "Admin" | "GeneralUser" | null => {
+  if (role === "Admin") return "Admin";
+  if (role === "GeneralUser" || role === "General User") return "GeneralUser";
+  return null;
+};
+
 // POST /api/auth/login
 router.post("/login", async (req: Request, res: Response): Promise<void> => {
   try {
@@ -17,7 +23,8 @@ router.post("/login", async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    if (!["Admin", "GeneralUser"].includes(role)) {
+    const selectedRole = normalizeRole(role);
+    if (!selectedRole) {
       res.status(400).json({ message: "Invalid role selected" });
       return;
     }
@@ -36,7 +43,7 @@ router.post("/login", async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    if (user.role !== role) {
+    if (user.role !== selectedRole) {
       res.status(403).json({ message: "Selected role does not match this user" });
       return;
     }

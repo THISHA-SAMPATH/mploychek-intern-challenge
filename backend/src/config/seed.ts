@@ -1,16 +1,19 @@
-import User from '../models/user.model';
-import Record from '../models/record.model';
+import User, { IUser } from '../models/user.model';
+import Record, { IRecord } from '../models/record.model';
 
 const seedData = async (): Promise<void> => {
   try {
-    const userCount = await User.countDocuments();
-    if (userCount > 0) {
-      console.log('Seed data already exists, skipping...');
-      return;
-    }
-
-    // Create Users
-    const users = await User.create([
+    const demoUsers: Array<Pick<
+      IUser,
+      | 'userId'
+      | 'name'
+      | 'email'
+      | 'password'
+      | 'role'
+      | 'department'
+      | 'verificationStatus'
+      | 'isActive'
+    >> = [
       {
         userId: 'USR001',
         name: 'Thisha Sampath',
@@ -61,12 +64,27 @@ const seedData = async (): Promise<void> => {
         verificationStatus: 'Verified',
         isActive: true,
       },
-    ]);
+    ];
 
-    console.log(`Created ${users.length} users`);
+    let createdUsers = 0;
+    for (const demoUser of demoUsers) {
+      const exists = await User.exists({ userId: demoUser.userId });
+      if (!exists) {
+        await User.create(demoUser);
+        createdUsers += 1;
+      }
+    }
 
-    // Create Records
-    const records = await Record.create([
+    console.log(
+      createdUsers > 0
+        ? `Created ${createdUsers} missing demo users`
+        : 'Demo users already exist, skipping user seed...',
+    );
+
+    const demoRecords: Array<Pick<
+      IRecord,
+      'recordId' | 'userId' | 'type' | 'status' | 'details' | 'assignedTo'
+    >> = [
       {
         recordId: 'REC001',
         userId: 'USR002',
@@ -115,9 +133,22 @@ const seedData = async (): Promise<void> => {
         details: 'MBA from IIM Bangalore pending verification',
         assignedTo: 'USR001',
       },
-    ]);
+    ];
 
-    console.log(`Created ${records.length} records`);
+    let createdRecords = 0;
+    for (const demoRecord of demoRecords) {
+      const exists = await Record.exists({ recordId: demoRecord.recordId });
+      if (!exists) {
+        await Record.create(demoRecord);
+        createdRecords += 1;
+      }
+    }
+
+    console.log(
+      createdRecords > 0
+        ? `Created ${createdRecords} missing demo records`
+        : 'Demo records already exist, skipping record seed...',
+    );
     console.log('Seed complete!');
 
   } catch (error) {
