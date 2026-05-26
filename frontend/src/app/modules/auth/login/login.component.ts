@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AuthService } from '../../../core/services/auth.service';
+import { ThemeService } from '../../../core/services/theme.service';
 
 @Component({
   selector: 'app-login',
@@ -35,7 +36,8 @@ export class LoginComponent {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private themeService: ThemeService
   ) {
     this.loginForm = this.fb.group({
       userId: ['', [Validators.required]],
@@ -48,6 +50,14 @@ export class LoginComponent {
     }
   }
 
+  isDarkTheme(): boolean {
+    return this.themeService.isDark();
+  }
+
+  toggleTheme(): void {
+    this.themeService.toggleTheme();
+  }
+
   onSubmit(): void {
     if (this.loginForm.invalid) return;
 
@@ -57,7 +67,7 @@ export class LoginComponent {
       next: (response) => {
         this.isLoading.set(false);
         this.snackBar.open(
-          `Welcome back, ${response.user.name}! 👋`,
+          `Welcome back, ${response.user.name}!`,
           'Close',
           { duration: 3000, panelClass: ['success-snackbar'] }
         );
@@ -80,5 +90,11 @@ export class LoginComponent {
     } else {
       this.loginForm.patchValue({ userId: 'USR002', password: 'password123' });
     }
+  }
+
+  loginAsDemo(role: 'admin' | 'user'): void {
+    this.fillDemo(role);
+    this.loginForm.markAllAsTouched();
+    this.onSubmit();
   }
 }

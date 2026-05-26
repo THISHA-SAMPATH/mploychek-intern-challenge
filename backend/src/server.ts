@@ -44,15 +44,15 @@ app.get("/api/health", (req, res) => {
 
 // Socket.io connection
 io.on("connection", (socket) => {
-  console.log(`🔌 Client connected: ${socket.id}`);
+  console.log(`Client connected: ${socket.id}`);
 
   socket.on("join", (userId: string) => {
     socket.join(userId);
-    console.log(`👤 User ${userId} joined their room`);
+    console.log(`User ${userId} joined their room`);
   });
 
   socket.on("disconnect", () => {
-    console.log(`🔌 Client disconnected: ${socket.id}`);
+    console.log(`Client disconnected: ${socket.id}`);
   });
 });
 
@@ -67,9 +67,9 @@ const startServer = async (): Promise<void> => {
   await seedData();
 
   server.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
-    console.log(`📡 Socket.io ready`);
-    console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
+    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Socket.io ready`);
+    console.log(`Environment: ${process.env.NODE_ENV}`);
   });
 };
 

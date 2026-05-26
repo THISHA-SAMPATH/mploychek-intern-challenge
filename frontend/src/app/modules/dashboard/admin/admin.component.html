@@ -1,6 +1,10 @@
 <div class="admin-container">
   <div class="admin-header">
-    <h2><mat-icon>admin_panel_settings</mat-icon> Admin Panel</h2>
+    <div>
+      <span>Operations</span>
+      <h2><mat-icon>admin_panel_settings</mat-icon> Admin Panel</h2>
+      <p>Manage users, verification states, and audit activity from one console.</p>
+    </div>
     <button mat-raised-button color="primary" (click)="showCreateForm.set(!showCreateForm())">
       <mat-icon>{{ showCreateForm() ? 'close' : 'person_add' }}</mat-icon>
       {{ showCreateForm() ? 'Cancel' : 'Add User' }}
@@ -9,7 +13,7 @@
 
   <!-- Create User Form -->
   @if (showCreateForm()) {
-    <mat-card class="create-form-card">
+    <mat-card class="create-form-card premium-card">
       <mat-card-header>
         <mat-card-title>Create New User</mat-card-title>
       </mat-card-header>
@@ -50,7 +54,7 @@
     </mat-card>
   }
 
-  <mat-tab-group>
+  <mat-tab-group class="admin-tabs premium-card">
     <!-- Users Tab -->
     <mat-tab label="Users">
       <div class="tab-content">

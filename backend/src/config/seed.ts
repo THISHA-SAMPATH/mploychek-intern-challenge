@@ -5,7 +5,7 @@ const seedData = async (): Promise<void> => {
   try {
     const userCount = await User.countDocuments();
     if (userCount > 0) {
-      console.log('⏭️  Seed data already exists, skipping...');
+      console.log('Seed data already exists, skipping...');
       return;
     }
 
@@ -63,7 +63,7 @@ const seedData = async (): Promise<void> => {
       },
     ]);
 
-    console.log(`✅ Created ${users.length} users`);
+    console.log(`Created ${users.length} users`);
 
     // Create Records
     const records = await Record.create([
@@ -117,11 +117,11 @@ const seedData = async (): Promise<void> => {
       },
     ]);
 
-    console.log(`✅ Created ${records.length} records`);
-    console.log('🌱 Seed complete!');
+    console.log(`Created ${records.length} records`);
+    console.log('Seed complete!');
 
   } catch (error) {
-    console.error('❌ Seed error:', error);
+    console.error('Seed error:', error);
   }
 };
 

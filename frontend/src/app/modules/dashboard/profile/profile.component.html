@@ -1,12 +1,41 @@
 <div class="profile-container">
+  <section class="profile-hero">
+    <span>My profile</span>
+    <h1>Verification identity</h1>
+    <p>Review your account details and the current progress of your background check.</p>
+  </section>
+
   @if (isLoading()) {
-    <div class="loading">Loading profile...</div>
+    <div class="profile-grid">
+      <mat-card class="profile-card premium-card profile-skeleton">
+        <mat-card-content>
+          <div class="skeleton avatar-skeleton"></div>
+          <span class="skeleton name-skeleton"></span>
+          <span class="skeleton id-skeleton"></span>
+          <span class="skeleton badge-skeleton"></span>
+          <mat-divider class="divider"></mat-divider>
+          <span class="skeleton line-skeleton"></span>
+          <span class="skeleton line-skeleton"></span>
+          <span class="skeleton line-skeleton"></span>
+        </mat-card-content>
+      </mat-card>
+
+      <div class="right-column">
+        <mat-card class="status-card premium-card profile-skeleton">
+          <mat-card-content>
+            <div class="skeleton ring-skeleton"></div>
+            <span class="skeleton line-skeleton wide"></span>
+            <span class="skeleton line-skeleton"></span>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
   }
 
   @if (!isLoading() && user()) {
     <div class="profile-grid">
       <!-- Profile Card -->
-      <mat-card class="profile-card">
+      <mat-card class="profile-card premium-card">
         <mat-card-content>
           <div class="avatar">
             {{ getInitials(user()!.name) }}
@@ -38,7 +67,7 @@
 
       <!-- Verification Status Card -->
       <div class="right-column">
-        <mat-card class="status-card">
+        <mat-card class="status-card premium-card">
           <mat-card-header>
             <mat-card-title>
               <mat-icon>verified_user</mat-icon>
@@ -57,15 +86,26 @@
             </div>
 
             <div class="progress-section">
-              <div class="progress-label">
-                <span>Verification Progress</span>
-                <span>{{ getVerificationProgress(user()!.verificationStatus) }}%</span>
+              <div
+                class="progress-ring"
+                [style.--progress-color]="getStatusColor(user()!.verificationStatus)"
+              >
+                <svg viewBox="0 0 120 120" aria-hidden="true">
+                  <circle class="ring-track" cx="60" cy="60" r="52"></circle>
+                  <circle
+                    class="ring-value"
+                    cx="60"
+                    cy="60"
+                    r="52"
+                    [attr.stroke-dasharray]="ringCircumference"
+                    [attr.stroke-dashoffset]="getRingOffset(user()!.verificationStatus)"
+                  ></circle>
+                </svg>
+                <div class="ring-label">
+                  <strong>{{ getVerificationProgress(user()!.verificationStatus) }}%</strong>
+                  <span>Complete</span>
+                </div>
               </div>
-              <mat-progress-bar
-                mode="determinate"
-                [value]="getVerificationProgress(user()!.verificationStatus)"
-                [color]="user()!.verificationStatus === 'Flagged' ? 'warn' : 'primary'"
-              ></mat-progress-bar>
             </div>
 
             <div class="pipeline">
@@ -86,7 +126,7 @@
           </mat-card-content>
         </mat-card>
 
-        <mat-card class="account-card">
+        <mat-card class="account-card premium-card">
           <mat-card-header>
             <mat-card-title>
               <mat-icon>security</mat-icon>

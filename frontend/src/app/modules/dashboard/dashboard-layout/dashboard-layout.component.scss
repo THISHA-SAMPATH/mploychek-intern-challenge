@@ -1,53 +1,68 @@
 .sidenav-container {
   height: 100vh;
+  background: #f7f7f8;
 }
 
 .sidenav {
-  width: 240px;
-  background: #1a1a2e;
-  color: white;
-  display: flex;
-  flex-direction: column;
+  width: 260px;
+  color: #ffffff;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  background: #101014;
+  box-shadow: none;
 }
 
 .sidenav-header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 24px 16px;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  gap: 12px;
+  padding: 28px 20px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
   .logo-icon {
-    width: 32px;
-    height: 32px;
-    background: #1976d2;
-    color: white;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 10px;
+    background: #1f1f25;
+    box-shadow: none;
+
+    mat-icon {
+      width: 20px;
+      height: 20px;
+      font-size: 20px;
+    }
   }
 
   .logo-text {
-    font-size: 18px;
-    font-weight: 700;
-    color: white;
+    color: #ffffff;
+    font-size: 19px;
+    font-weight: 800;
   }
 }
 
 mat-nav-list {
-  flex: 1;
-  padding-top: 8px;
+  padding: 18px 14px;
 
   a {
-    color: rgba(255,255,255,0.7) !important;
+    height: 46px !important;
+    margin: 4px 0;
     border-radius: 8px;
-    margin: 2px 8px;
+    color: rgba(255, 255, 255, 0.72) !important;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+
+    &:hover {
+      color: #ffffff !important;
+      background: rgba(255, 255, 255, 0.1) !important;
+      transform: translateX(2px);
+    }
 
     &.active-link {
-      background: rgba(25, 118, 210, 0.3) !important;
-      color: white !important;
+      color: #ffffff !important;
+      background: rgba(255, 255, 255, 0.1) !important;
+      box-shadow: inset 3px 0 0 #d91a75;
     }
 
     mat-icon {
@@ -57,50 +72,94 @@ mat-nav-list {
 }
 
 .sidenav-footer {
-  padding: 16px;
-  border-top: 1px solid rgba(255,255,255,0.1);
+  margin-top: auto;
+  padding: 16px 14px 22px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 
   .logout-btn {
     width: 100%;
-    color: rgba(255,255,255,0.7);
-    display: flex;
+    min-height: 44px;
+    display: inline-flex;
     align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    background: none;
-    border: none;
-    padding: 8px;
+    gap: 10px;
+    padding: 10px 12px;
+    color: rgba(255, 255, 255, 0.76);
+    border: 0;
     border-radius: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    cursor: pointer;
 
     &:hover {
-      background: rgba(255,255,255,0.1);
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.14);
     }
   }
 }
 
 .toolbar {
-  background: white;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  height: 68px;
   position: sticky;
   top: 0;
   z-index: 100;
+  color: #111111;
+  border-bottom: 1px solid rgba(24, 24, 27, 0.08);
+  background: #ffffff;
+  box-shadow: none;
 
   .toolbar-title {
-    font-weight: 600;
-    color: #1a1a2e;
+    font-family: 'Inter', 'Roboto', sans-serif;
+    font-size: clamp(17px, 2vw, 22px);
+    font-weight: 700;
+    letter-spacing: 0;
   }
 
-  .spacer { flex: 1; }
+  .spacer {
+    flex: 1;
+  }
 }
 
 .content {
-  padding: 24px;
-  background: #f5f5f5;
-  min-height: calc(100vh - 64px);
+  position: relative;
+  min-height: calc(100vh - 70px);
+  padding: clamp(20px, 3vw, 34px);
+  background: #f7f7f8;
+}
+
+.content > * {
+  position: relative;
+  z-index: 1;
 }
 
 .no-notif {
-  padding: 16px;
-  color: #999;
   margin: 0;
+  padding: 16px;
+  color: #71717a;
+}
+
+:host-context(.dark-theme) {
+  .sidenav-container {
+    background: #09090b;
+  }
+
+  .toolbar {
+    color: #f8fafc;
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+    background: rgba(12, 12, 14, 0.86);
+  }
+
+  .content {
+    background:
+      radial-gradient(circle at 100% 0%, rgba(241, 24, 146, 0.18), transparent 28%),
+      linear-gradient(135deg, #09090b 0%, #111114 100%);
+  }
+}
+
+@media (max-width: 860px) {
+  .sidenav {
+    width: 230px;
+  }
+
+  .toolbar .toolbar-title {
+    font-size: 18px;
+  }
 }

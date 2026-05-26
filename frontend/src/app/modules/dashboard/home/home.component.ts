@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
 import { RecordService } from '../../../core/services/record.service';
 import { AuthService } from '../../../core/services/auth.service';
@@ -26,6 +27,7 @@ import { Record as VerificationRecord } from '../../../core/models/record.model'
     MatProgressBarModule,
     MatSelectModule,
     MatFormFieldModule,
+    MatTooltipModule,
     FormsModule,
   ],
   templateUrl: './home.component.html',
@@ -36,6 +38,8 @@ export class HomeComponent implements OnInit {
   isLoading = signal(false);
   delay = signal(0);
   displayedColumns = ['recordId', 'type', 'status', 'details', 'createdAt'];
+  skeletonCards = [1, 2, 3, 4];
+  skeletonRows = [1, 2, 3, 4, 5];
 
   stats = signal({ total: 0, verified: 0, pending: 0, flagged: 0 });
 
@@ -63,6 +67,11 @@ export class HomeComponent implements OnInit {
       },
       error: () => this.isLoading.set(false),
     });
+  }
+
+  setDelay(delay: number): void {
+    this.delay.set(delay);
+    this.loadRecords();
   }
 
   getStatusColor(status: string): string {

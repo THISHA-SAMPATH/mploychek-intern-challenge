@@ -5,7 +5,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { UserService } from '../../../core/services/user.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { User } from '../../../core/models/user.model';
@@ -20,7 +19,6 @@ import { User } from '../../../core/models/user.model';
     MatChipsModule,
     MatDividerModule,
     MatButtonModule,
-    MatProgressBarModule,
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
@@ -28,6 +26,7 @@ import { User } from '../../../core/models/user.model';
 export class ProfileComponent implements OnInit {
   user = signal<User | null>(null);
   isLoading = signal(true);
+  ringCircumference = 2 * Math.PI * 52;
 
   constructor(
     private userService: UserService,
@@ -66,5 +65,10 @@ export class ProfileComponent implements OnInit {
       Flagged: 40,
     };
     return map[status] || 0;
+  }
+
+  getRingOffset(status: string): number {
+    const progress = this.getVerificationProgress(status);
+    return this.ringCircumference * (1 - progress / 100);
   }
 }

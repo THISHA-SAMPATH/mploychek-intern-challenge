@@ -6,7 +6,7 @@ import { AuthResponse, LoginCredentials, User } from '../models/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = '/api';
 
   currentUser = signal<User | null>(null);
   isAuthenticated = signal<boolean>(false);
@@ -45,6 +45,23 @@ export class AuthService {
 
   getToken(): string | null {
     return localStorage.getItem('accessToken');
+  }
+
+  getRefreshToken(): string | null {
+    return localStorage.getItem('refreshToken');
+  }
+
+  refreshAccessToken(): Observable<{ accessToken: string }> {
+    return this.http
+      .post<{ accessToken: string }>(`${this.apiUrl}/auth/refresh`, {
+        refreshToken: this.getRefreshToken(),
+      })
+      .pipe(
+        tap((response) => {
+          localStorage.setItem('accessToken', response.accessToken);
+          this.isAuthenticated.set(true);
+        })
+      );
   }
 
   isAdmin(): boolean {

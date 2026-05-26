@@ -1,39 +1,163 @@
-// Include theming for Angular Material with `mat.theme()`.
-// This Sass mixin will define CSS variables that are used for styling Angular Material
-// components according to the Material 3 design spec.
-// Learn more about theming and how to use it for your application's
-// custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
 
-html {
-  height: 100%;
-  @include mat.theme(
-    (
-      color: (
-        primary: mat.$azure-palette,
-        tertiary: mat.$blue-palette,
-      ),
-      typography: Roboto,
-      density: 0,
-    )
-  );
+:root {
+  --primary: #111827;
+  --primary-dark: #09090b;
+  --accent: #d91a75;
+  --bg: #f7f7f8;
+  --bg-soft: #ffffff;
+  --surface: rgba(255, 255, 255, 0.96);
+  --surface-solid: #ffffff;
+  --sidebar-bg: #101014;
+  --sidebar-text: rgba(255, 255, 255, 0.75);
+  --sidebar-active: rgba(255, 255, 255, 0.1);
+  --text-primary: #18181b;
+  --text-secondary: #71717a;
+  --border: rgba(24, 24, 27, 0.1);
+  --shadow: 0 12px 32px rgba(24, 24, 27, 0.06);
+  --shadow-hover: 0 16px 42px rgba(24, 24, 27, 0.08);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Status colors */
+  --verified: #10b981;
+  --pending: #f59e0b;
+  --inreview: #3b82f6;
+  --flagged: #ef4444;
+}
+
+/* Dark mode */
+body.dark-theme {
+  --bg: #0b132b;
+  --bg-soft: #111827;
+  --surface: rgba(255, 255, 255, 0.05);
+  --surface-solid: #111827;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --border: rgba(255, 255, 255, 0.08);
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --shadow-hover: 0 16px 48px rgba(0, 0, 0, 0.6);
+
+  .mat-mdc-card {
+    background: var(--surface) !important;
+    color: var(--text-primary) !important;
+  }
+
+  .mat-mdc-table {
+    background: transparent !important;
+    color: var(--text-primary) !important;
+  }
+
+  th.mat-mdc-header-cell {
+    color: var(--text-secondary) !important;
+    background: transparent !important;
+  }
+
+  td.mat-mdc-cell {
+    color: var(--text-primary) !important;
+    border-color: var(--border) !important;
+  }
+
+  .mat-mdc-toolbar {
+    background: var(--surface-solid) !important;
+    color: var(--text-primary) !important;
+  }
+
+  .content {
+    background: var(--bg) !important;
+  }
+}
+
+/* Global resets */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  // Default the application to a light color theme. This can be changed to
-  // `dark` to enable the dark color theme, or to `light dark` to defer to the
-  // user's system settings.
-  color-scheme: light;
-
-  // Set a default background, font and text colors for the application using
-  // Angular Material's system-level CSS variables. Learn more about these
-  // variables at https://material.angular.dev/guide/system-variables
-  background-color: var(--mat-sys-surface);
-  color: var(--mat-sys-on-surface);
-  font: var(--mat-sys-body-medium);
-
-  // Reset the user agent margin.
-  margin: 0;
-  height: 100%;
+  font-family: 'Inter', 'Roboto', sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  transition: background 0.3s ease, color 0.3s ease;
 }
-/* You can add global styles to this file, and also import other style files */
+
+/* Premium card utility */
+.premium-card {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: var(--shadow) !important;
+  border-radius: var(--radius) !important;
+  transition: var(--transition) !important;
+
+  &:hover {
+    box-shadow: var(--shadow-hover) !important;
+  }
+}
+
+/* Status badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+
+  &.verified { background: rgba(16,185,129,0.12); color: var(--verified); }
+  &.pending { background: rgba(245,158,11,0.12); color: var(--pending); }
+  &.inreview { background: rgba(59,130,246,0.12); color: var(--inreview); }
+  &.flagged { background: rgba(239,68,68,0.12); color: var(--flagged); }
+}
+
+/* Skeleton shimmer */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(148, 163, 184, 0.14) 25%,
+    rgba(148, 163, 184, 0.28) 50%,
+    rgba(148, 163, 184, 0.14) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 6px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Snackbar styles */
+.success-snackbar {
+  --mdc-snackbar-container-color: #10b981 !important;
+  --mdc-snackbar-supporting-text-color: white !important;
+}
+
+.error-snackbar {
+  --mdc-snackbar-container-color: #ef4444 !important;
+  --mdc-snackbar-supporting-text-color: white !important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.15);
+  border-radius: 3px;
+}
+
+/* Table hover */
+.mat-mdc-row {
+  transition: var(--transition) !important;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(24, 24, 27, 0.035) !important;
+  }
+}
+
+/* Inter font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');

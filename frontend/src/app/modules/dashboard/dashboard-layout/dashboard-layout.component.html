@@ -1,21 +1,23 @@
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav mode="side" opened class="sidenav">
     <div class="sidenav-header">
-      <span class="logo-icon">✓</span>
+      <span class="logo-icon">
+        <mat-icon>verified</mat-icon>
+      </span>
       <span class="logo-text">MPloyChek</span>
     </div>
 
     <mat-nav-list>
-      <a mat-list-item routerLink="home" routerLinkActive="active-link">
+      <a mat-list-item routerLink="/dashboard/home" routerLinkActive="active-link">
         <mat-icon matListItemIcon>dashboard</mat-icon>
         <span matListItemTitle>Dashboard</span>
       </a>
-      <a mat-list-item routerLink="profile" routerLinkActive="active-link">
+      <a mat-list-item routerLink="/dashboard/profile" routerLinkActive="active-link">
         <mat-icon matListItemIcon>person</mat-icon>
         <span matListItemTitle>My Profile</span>
       </a>
       @if (authService.isAdmin()) {
-        <a mat-list-item routerLink="admin" routerLinkActive="active-link">
+        <a mat-list-item routerLink="/dashboard/admin" routerLinkActive="active-link">
           <mat-icon matListItemIcon>admin_panel_settings</mat-icon>
           <span matListItemTitle>Admin Panel</span>
         </a>
@@ -37,7 +39,7 @@
       </span>
       <span class="spacer"></span>
 
-      <button mat-icon-button (click)="themeService.toggleTheme()">
+      <button mat-icon-button (click)="themeService.toggleTheme()" matTooltip="Toggle theme">
         <mat-icon>{{ themeService.isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
       </button>
 
@@ -61,7 +63,7 @@
       </button>
 
       <mat-menu #userMenu="matMenu">
-        <button mat-menu-item routerLink="profile">
+        <button mat-menu-item routerLink="/dashboard/profile">
           <mat-icon>person</mat-icon> Profile
         </button>
         <button mat-menu-item (click)="logout()">

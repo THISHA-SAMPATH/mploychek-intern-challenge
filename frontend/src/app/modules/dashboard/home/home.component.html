@@ -1,49 +1,75 @@
 <div class="home-container">
+  <section class="page-hero">
+    <div>
+      <span>Verification overview</span>
+      <h1>Background checks at a glance</h1>
+      <p>Track verification volume, review status, and recent records from one workspace.</p>
+    </div>
+    <button mat-flat-button type="button" (click)="loadRecords()">
+      <mat-icon>refresh</mat-icon>
+      Refresh
+    </button>
+  </section>
+
   <!-- Stats Cards -->
   <div class="stats-grid">
-    <mat-card class="stat-card total">
-      <mat-card-content>
-        <div class="stat-icon"><mat-icon>folder</mat-icon></div>
-        <div class="stat-info">
-          <span class="stat-value">{{ stats().total }}</span>
-          <span class="stat-label">Total Records</span>
-        </div>
-      </mat-card-content>
-    </mat-card>
+    @if (isLoading()) {
+      @for (card of skeletonCards; track card) {
+        <mat-card class="stat-card premium-card skeleton-card">
+          <mat-card-content>
+            <div class="skeleton skeleton-icon"></div>
+            <div class="stat-info">
+              <span class="skeleton skeleton-value"></span>
+              <span class="skeleton skeleton-label"></span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    } @else {
+      <mat-card class="stat-card premium-card total">
+        <mat-card-content>
+          <div class="stat-icon"><mat-icon>folder</mat-icon></div>
+          <div class="stat-info">
+            <span class="stat-value">{{ stats().total }}</span>
+            <span class="stat-label">Total Records</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
 
-    <mat-card class="stat-card verified">
-      <mat-card-content>
-        <div class="stat-icon"><mat-icon>check_circle</mat-icon></div>
-        <div class="stat-info">
-          <span class="stat-value">{{ stats().verified }}</span>
-          <span class="stat-label">Verified</span>
-        </div>
-      </mat-card-content>
-    </mat-card>
+      <mat-card class="stat-card premium-card verified">
+        <mat-card-content>
+          <div class="stat-icon"><mat-icon>check_circle</mat-icon></div>
+          <div class="stat-info">
+            <span class="stat-value">{{ stats().verified }}</span>
+            <span class="stat-label">Verified</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
 
-    <mat-card class="stat-card pending">
-      <mat-card-content>
-        <div class="stat-icon"><mat-icon>schedule</mat-icon></div>
-        <div class="stat-info">
-          <span class="stat-value">{{ stats().pending }}</span>
-          <span class="stat-label">Pending</span>
-        </div>
-      </mat-card-content>
-    </mat-card>
+      <mat-card class="stat-card premium-card pending">
+        <mat-card-content>
+          <div class="stat-icon"><mat-icon>schedule</mat-icon></div>
+          <div class="stat-info">
+            <span class="stat-value">{{ stats().pending }}</span>
+            <span class="stat-label">Pending</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
 
-    <mat-card class="stat-card flagged">
-      <mat-card-content>
-        <div class="stat-icon"><mat-icon>flag</mat-icon></div>
-        <div class="stat-info">
-          <span class="stat-value">{{ stats().flagged }}</span>
-          <span class="stat-label">Flagged</span>
-        </div>
-      </mat-card-content>
-    </mat-card>
+      <mat-card class="stat-card premium-card flagged">
+        <mat-card-content>
+          <div class="stat-icon"><mat-icon>flag</mat-icon></div>
+          <div class="stat-info">
+            <span class="stat-value">{{ stats().flagged }}</span>
+            <span class="stat-label">Flagged</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    }
   </div>
 
   <!-- Records Table -->
-  <mat-card class="table-card">
+  <mat-card class="table-card premium-card">
     <mat-card-header>
       <mat-card-title>
         <mat-icon>assignment</mat-icon>
@@ -52,7 +78,7 @@
       <div class="table-actions">
         <mat-form-field appearance="outline" class="delay-select">
           <mat-label>Simulate Delay</mat-label>
-          <mat-select [(ngModel)]="delay" (ngModelChange)="loadRecords()">
+          <mat-select [ngModel]="delay()" (ngModelChange)="setDelay($event)">
             <mat-option [value]="0">No delay</mat-option>
             <mat-option [value]="1000">1 second</mat-option>
             <mat-option [value]="2000">2 seconds</mat-option>
@@ -68,7 +94,15 @@
     @if (isLoading()) {
       <mat-progress-bar mode="indeterminate" color="primary"></mat-progress-bar>
       <div class="loading-state">
-        <div class="skeleton" *ngFor="let i of [1, 2, 3, 4]"></div>
+        @for (row of skeletonRows; track row) {
+          <div class="skeleton-row">
+            <span class="skeleton id"></span>
+            <span class="skeleton type"></span>
+            <span class="skeleton status"></span>
+            <span class="skeleton details"></span>
+            <span class="skeleton date"></span>
+          </div>
+        }
       </div>
     }
 
@@ -117,8 +151,11 @@
 
         @if (records().length === 0) {
           <div class="empty-state">
-            <mat-icon>inbox</mat-icon>
-            <p>No records found</p>
+            <div class="empty-graphic">
+              <mat-icon>manage_search</mat-icon>
+            </div>
+            <h3>No records found</h3>
+            <p>Try refreshing or changing your verification filters.</p>
           </div>
         }
       </mat-card-content>
