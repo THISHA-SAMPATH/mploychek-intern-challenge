@@ -1,7 +1,21 @@
 import User, { IUser } from '../models/user.model';
 import Record, { IRecord } from '../models/record.model';
 
-const seedData = async (): Promise<void> => {
+export interface SeedResult {
+  createdUsers: number;
+  repairedUsers: number;
+  createdRecords: number;
+  repairedRecords: number;
+}
+
+const seedData = async (): Promise<SeedResult> => {
+  const result: SeedResult = {
+    createdUsers: 0,
+    repairedUsers: 0,
+    createdRecords: 0,
+    repairedRecords: 0,
+  };
+
   try {
     const demoUsers: Array<Pick<
       IUser,
@@ -66,19 +80,29 @@ const seedData = async (): Promise<void> => {
       },
     ];
 
-    let createdUsers = 0;
     for (const demoUser of demoUsers) {
-      const exists = await User.exists({ userId: demoUser.userId });
-      if (!exists) {
+      const existingUser = await User.findOne({ userId: demoUser.userId });
+      if (!existingUser) {
         await User.create(demoUser);
-        createdUsers += 1;
+        result.createdUsers += 1;
+        continue;
       }
+
+      existingUser.name = demoUser.name;
+      existingUser.email = demoUser.email;
+      existingUser.password = demoUser.password;
+      existingUser.role = demoUser.role;
+      existingUser.department = demoUser.department;
+      existingUser.verificationStatus = demoUser.verificationStatus;
+      existingUser.isActive = true;
+      await existingUser.save();
+      result.repairedUsers += 1;
     }
 
     console.log(
-      createdUsers > 0
-        ? `Created ${createdUsers} missing demo users`
-        : 'Demo users already exist, skipping user seed...',
+      result.createdUsers > 0 || result.repairedUsers > 0
+        ? `Demo users ready: ${result.createdUsers} created, ${result.repairedUsers} repaired`
+        : 'Demo users already ready...',
     );
 
     const demoRecords: Array<Pick<
@@ -135,25 +159,35 @@ const seedData = async (): Promise<void> => {
       },
     ];
 
-    let createdRecords = 0;
     for (const demoRecord of demoRecords) {
-      const exists = await Record.exists({ recordId: demoRecord.recordId });
-      if (!exists) {
+      const existingRecord = await Record.findOne({ recordId: demoRecord.recordId });
+      if (!existingRecord) {
         await Record.create(demoRecord);
-        createdRecords += 1;
+        result.createdRecords += 1;
+        continue;
       }
+
+      existingRecord.userId = demoRecord.userId;
+      existingRecord.type = demoRecord.type;
+      existingRecord.status = demoRecord.status;
+      existingRecord.details = demoRecord.details;
+      existingRecord.assignedTo = demoRecord.assignedTo;
+      await existingRecord.save();
+      result.repairedRecords += 1;
     }
 
     console.log(
-      createdRecords > 0
-        ? `Created ${createdRecords} missing demo records`
-        : 'Demo records already exist, skipping record seed...',
+      result.createdRecords > 0 || result.repairedRecords > 0
+        ? `Demo records ready: ${result.createdRecords} created, ${result.repairedRecords} repaired`
+        : 'Demo records already ready...',
     );
     console.log('Seed complete!');
 
   } catch (error) {
     console.error('Seed error:', error);
   }
+
+  return result;
 };
 
 export default seedData;

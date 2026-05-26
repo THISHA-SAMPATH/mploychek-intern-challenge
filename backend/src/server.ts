@@ -10,6 +10,7 @@ import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
 import recordRoutes from "./routes/record.routes";
 import documentRoutes from "./routes/document.routes";
+import seedRoutes from "./routes/seed.routes";
 
 dotenv.config();
 
@@ -53,6 +54,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/records", recordRoutes);
 app.use("/api/documents", documentRoutes);
+app.use("/api/seed", seedRoutes);
 
 // Health check
 app.get("/api/health", (req, res) => {

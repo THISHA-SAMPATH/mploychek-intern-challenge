@@ -28,4 +28,8 @@ export class UserService {
   deactivateUser(userId: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/users/${userId}`);
   }
+
+  restoreDemoData(): Observable<any> {
+    return this.http.post(`${this.apiUrl}/seed/demo`, {});
+  }
 }

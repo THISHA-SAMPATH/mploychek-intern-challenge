@@ -5,10 +5,21 @@
       <h2><mat-icon>admin_panel_settings</mat-icon> Admin Panel</h2>
       <p>Manage users, verification states, and audit activity from one console.</p>
     </div>
-    <button mat-raised-button color="primary" (click)="showCreateForm.set(!showCreateForm())">
-      <mat-icon>{{ showCreateForm() ? 'close' : 'person_add' }}</mat-icon>
-      {{ showCreateForm() ? 'Cancel' : 'Add User' }}
-    </button>
+    <div class="admin-header-actions">
+      <button
+        mat-stroked-button
+        type="button"
+        (click)="restoreDemoData()"
+        [disabled]="isRestoringDemo()"
+      >
+        <mat-icon>{{ isRestoringDemo() ? 'hourglass_top' : 'restore' }}</mat-icon>
+        {{ isRestoringDemo() ? 'Restoring...' : 'Restore Demo Data' }}
+      </button>
+      <button mat-raised-button color="primary" (click)="showCreateForm.set(!showCreateForm())">
+        <mat-icon>{{ showCreateForm() ? 'close' : 'person_add' }}</mat-icon>
+        {{ showCreateForm() ? 'Cancel' : 'Add User' }}
+      </button>
+    </div>
   </div>
 
   <!-- Create User Form -->
@@ -221,6 +232,18 @@
           <tr mat-header-row *matHeaderRowDef="userColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: userColumns"></tr>
         </table>
+
+        @if (!isLoading() && users().length === 0) {
+          <div class="empty-admin-state">
+            <mat-icon>group_off</mat-icon>
+            <h3>No users found</h3>
+            <p>Restore demo data to create the Admin, General Users, and sample verification records.</p>
+            <button mat-flat-button type="button" (click)="restoreDemoData()" [disabled]="isRestoringDemo()">
+              <mat-icon>restore</mat-icon>
+              Restore Demo Data
+            </button>
+          </div>
+        }
       </div>
     </mat-tab>
 

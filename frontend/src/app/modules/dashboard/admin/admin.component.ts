@@ -49,6 +49,7 @@ export class AdminComponent implements OnInit {
   documents = signal<VerificationDocument[]>([]);
   isLoading = signal(false);
   isCreating = signal(false);
+  isRestoringDemo = signal(false);
   showCreateForm = signal(false);
   reviewRemarks: Record<string, string> = {};
 
@@ -121,6 +122,22 @@ export class AdminComponent implements OnInit {
       error: (err) => {
         this.isCreating.set(false);
         this.snackBar.open(err.error?.message || 'Failed to create user', 'Close', { duration: 3000 });
+      },
+    });
+  }
+
+  restoreDemoData(): void {
+    this.isRestoringDemo.set(true);
+    this.userService.restoreDemoData().subscribe({
+      next: () => {
+        this.isRestoringDemo.set(false);
+        this.snackBar.open('Demo users and records restored', 'Close', { duration: 3000 });
+        this.loadUsers();
+        this.loadAuditLogs();
+      },
+      error: (err) => {
+        this.isRestoringDemo.set(false);
+        this.snackBar.open(err.error?.message || 'Unable to restore demo data', 'Close', { duration: 3000 });
       },
     });
   }

@@ -44,11 +44,20 @@
     line-height: 1.55;
   }
 
-  button {
+  .admin-header-actions {
+    display: flex;
     flex: 0 0 auto;
-    color: #ffffff !important;
-    background: #18181b !important;
-    border-radius: 8px;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    button {
+      border-radius: 8px;
+    }
+
+    button:last-child {
+      color: #ffffff !important;
+      background: #18181b !important;
+    }
   }
 }
 
@@ -241,6 +250,41 @@
   gap: 8px;
   color: #71717a;
   text-align: center;
+}
+
+.empty-admin-state {
+  min-height: 220px;
+  display: grid;
+  place-items: center;
+  gap: 10px;
+  padding: 32px;
+  color: #71717a;
+  text-align: center;
+
+  mat-icon {
+    width: 44px;
+    height: 44px;
+    color: #c0266d;
+    font-size: 44px;
+  }
+
+  h3 {
+    margin: 0;
+    color: #18181b;
+    font-size: 18px;
+  }
+
+  p {
+    max-width: 420px;
+    margin: 0;
+  }
+
+  button {
+    margin-top: 6px;
+    color: #ffffff !important;
+    background: #18181b !important;
+    border-radius: 8px;
+  }
 }
 
 :host ::ng-deep {
