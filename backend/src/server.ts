@@ -14,17 +14,34 @@ dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
+const allowedOrigins = (
+  process.env.FRONTEND_URL || "http://localhost:4200,http://localhost:4300"
+)
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
 // Socket.io setup
 const io = new SocketServer(server, {
   cors: {
-    origin: "http://localhost:4200",
+    origin: allowedOrigins,
     methods: ["GET", "POST"],
   },
 });
 
 // Middleware
-app.use(cors({ origin: "http://localhost:4200" }));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error("Not allowed by CORS"));
+    },
+  }),
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

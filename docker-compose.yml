@@ -25,7 +25,8 @@ services:
       - JWT_EXPIRES_IN=15m
       - JWT_REFRESH_SECRET=mploychek_refresh_secret_2026
       - JWT_REFRESH_EXPIRES_IN=7d
-      - NODE_ENV=development
+      - FRONTEND_URL=http://localhost:4200
+      - NODE_ENV=production
     depends_on:
       - mongo
     networks:
