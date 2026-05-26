@@ -44,6 +44,7 @@ export class AdminComponent implements OnInit {
   users = signal<User[]>([]);
   auditLogs = signal<AuditLog[]>([]);
   isLoading = signal(false);
+  isCreating = signal(false);
   showCreateForm = signal(false);
 
   userColumns = ['userId', 'name', 'email', 'role', 'department', 'status', 'active', 'actions'];
@@ -87,9 +88,16 @@ export class AdminComponent implements OnInit {
   }
 
   createUser(): void {
-    if (this.createForm.invalid) return;
+    if (this.createForm.invalid) {
+      this.createForm.markAllAsTouched();
+      this.snackBar.open('Please complete all required fields correctly', 'Close', { duration: 3000 });
+      return;
+    }
+
+    this.isCreating.set(true);
     this.userService.createUser(this.createForm.value).subscribe({
       next: () => {
+        this.isCreating.set(false);
         this.snackBar.open('User created successfully', 'Close', { duration: 3000 });
         this.createForm.reset({ role: 'GeneralUser' });
         this.showCreateForm.set(false);
@@ -97,6 +105,7 @@ export class AdminComponent implements OnInit {
         this.loadAuditLogs();
       },
       error: (err) => {
+        this.isCreating.set(false);
         this.snackBar.open(err.error?.message || 'Failed to create user', 'Close', { duration: 3000 });
       },
     });

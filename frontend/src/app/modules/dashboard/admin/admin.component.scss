@@ -85,6 +85,12 @@
       color: #ffffff !important;
       background: #18181b !important;
       border-radius: 8px;
+
+      &:disabled {
+        color: rgba(255, 255, 255, 0.68) !important;
+        background: #71717a !important;
+        cursor: wait;
+      }
     }
   }
 }

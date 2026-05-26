@@ -22,18 +22,22 @@
           <mat-form-field appearance="outline">
             <mat-label>User ID</mat-label>
             <input matInput formControlName="userId" placeholder="USR006" />
+            <mat-error>User ID is required</mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>Full Name</mat-label>
             <input matInput formControlName="name" />
+            <mat-error>Full name is required</mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>Email</mat-label>
             <input matInput formControlName="email" type="email" />
+            <mat-error>Enter a valid email</mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>Password</mat-label>
             <input matInput formControlName="password" type="password" />
+            <mat-error>Password must be at least 6 characters</mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>Role</mat-label>
@@ -41,13 +45,15 @@
               <mat-option value="GeneralUser">General User</mat-option>
               <mat-option value="Admin">Admin</mat-option>
             </mat-select>
+            <mat-error>Role is required</mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>Department</mat-label>
             <input matInput formControlName="department" />
+            <mat-error>Department is required</mat-error>
           </mat-form-field>
-          <button mat-raised-button color="primary" type="submit" [disabled]="createForm.invalid">
-            Create User
+          <button mat-raised-button color="primary" type="submit" [disabled]="isCreating()">
+            {{ isCreating() ? 'Creating...' : 'Create User' }}
           </button>
         </form>
       </mat-card-content>
