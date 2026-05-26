@@ -22,6 +22,80 @@
     </div>
   </div>
 
+  <section class="analytics-grid" aria-label="Admin analytics">
+    @let analytics = getAnalytics();
+    <article class="analytics-card total">
+      <mat-icon>groups</mat-icon>
+      <div>
+        <strong>{{ analytics.totalUsers }}</strong>
+        <span>Total Users</span>
+      </div>
+    </article>
+    <article class="analytics-card user">
+      <mat-icon>person</mat-icon>
+      <div>
+        <strong>{{ analytics.generalUsers }}</strong>
+        <span>General Users</span>
+      </div>
+    </article>
+    <article class="analytics-card admin">
+      <mat-icon>admin_panel_settings</mat-icon>
+      <div>
+        <strong>{{ analytics.adminUsers }}</strong>
+        <span>Admins</span>
+      </div>
+    </article>
+    <article class="analytics-card pending">
+      <mat-icon>schedule</mat-icon>
+      <div>
+        <strong>{{ analytics.pendingUsers }}</strong>
+        <span>Pending</span>
+      </div>
+    </article>
+    <article class="analytics-card verified">
+      <mat-icon>verified</mat-icon>
+      <div>
+        <strong>{{ analytics.verifiedUsers }}</strong>
+        <span>Verified</span>
+      </div>
+    </article>
+    <article class="analytics-card flagged">
+      <mat-icon>flag</mat-icon>
+      <div>
+        <strong>{{ analytics.flaggedUsers }}</strong>
+        <span>Flagged</span>
+      </div>
+    </article>
+    <article class="analytics-card documents">
+      <mat-icon>description</mat-icon>
+      <div>
+        <strong>{{ analytics.uploadedDocs }}</strong>
+        <span>Documents</span>
+      </div>
+    </article>
+    <article class="analytics-card review">
+      <mat-icon>rate_review</mat-icon>
+      <div>
+        <strong>{{ analytics.reviewDocs }}</strong>
+        <span>Need Review</span>
+      </div>
+    </article>
+    <article class="analytics-card approved">
+      <mat-icon>check_circle</mat-icon>
+      <div>
+        <strong>{{ analytics.approvedDocs }}</strong>
+        <span>Approved Docs</span>
+      </div>
+    </article>
+    <article class="analytics-card rejected">
+      <mat-icon>cancel</mat-icon>
+      <div>
+        <strong>{{ analytics.rejectedDocs }}</strong>
+        <span>Rejected Docs</span>
+      </div>
+    </article>
+  </section>
+
   <!-- Create User Form -->
   @if (showCreateForm()) {
     <mat-card class="create-form-card premium-card">

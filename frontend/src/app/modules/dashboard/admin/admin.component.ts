@@ -220,4 +220,24 @@ export class AdminComponent implements OnInit {
     };
     return icons[status] || 'description';
   }
+
+  getAnalytics() {
+    const users = this.users();
+    const documents = this.documents();
+
+    return {
+      totalUsers: users.length,
+      generalUsers: users.filter((user) => user.role === 'GeneralUser').length,
+      adminUsers: users.filter((user) => user.role === 'Admin').length,
+      pendingUsers: users.filter((user) => user.verificationStatus === 'Pending').length,
+      verifiedUsers: users.filter((user) => user.verificationStatus === 'Verified').length,
+      flaggedUsers: users.filter((user) => user.verificationStatus === 'Flagged').length,
+      uploadedDocs: documents.length,
+      reviewDocs: documents.filter(
+        (doc) => doc.status === 'Uploaded' || doc.status === 'Under Review'
+      ).length,
+      approvedDocs: documents.filter((doc) => doc.status === 'Approved').length,
+      rejectedDocs: documents.filter((doc) => doc.status === 'Rejected').length,
+    };
+  }
 }
