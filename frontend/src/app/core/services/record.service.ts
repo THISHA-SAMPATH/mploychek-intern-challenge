@@ -6,14 +6,12 @@ import { AuditLog } from '../models/audit.model';
 
 @Injectable({ providedIn: 'root' })
 export class RecordService {
-  private apiUrl = '/api';
+  private apiUrl = 'https://mploychek-backend.onrender.com/api';
 
   constructor(private http: HttpClient) {}
 
   getRecords(delay: number = 0): Observable<RecordsResponse> {
-    return this.http.get<RecordsResponse>(
-      `${this.apiUrl}/records?delay=${delay}`
-    );
+    return this.http.get<RecordsResponse>(`${this.apiUrl}/records?delay=${delay}`);
   }
 
   updateRecordStatus(recordId: string, status: string): Observable<any> {
@@ -21,8 +19,6 @@ export class RecordService {
   }
 
   getAuditLogs(): Observable<{ count: number; logs: AuditLog[] }> {
-    return this.http.get<{ count: number; logs: AuditLog[] }>(
-      `${this.apiUrl}/records/audit/logs`
-    );
+    return this.http.get<{ count: number; logs: AuditLog[] }>(`${this.apiUrl}/records/audit/logs`);
   }
 }

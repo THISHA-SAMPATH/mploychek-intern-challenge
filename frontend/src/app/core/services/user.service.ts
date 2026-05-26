@@ -5,7 +5,7 @@ import { User } from '../models/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-  private apiUrl = '/api';
+  private apiUrl = 'https://mploychek-backend.onrender.com/api';;
 
   constructor(private http: HttpClient) {}
 

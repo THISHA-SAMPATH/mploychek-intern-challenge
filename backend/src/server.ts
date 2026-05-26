@@ -14,12 +14,13 @@ dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
-const allowedOrigins = (
-  process.env.FRONTEND_URL || "http://localhost:4200,http://localhost:4300"
-)
-  .split(",")
-  .map((origin) => origin.trim())
-  .filter(Boolean);
+
+const allowedOrigins = [
+  "http://localhost:4200",
+  "http://localhost:4300",
+  "https://mploychek-intern-challenge.vercel.app",
+  process.env.FRONTEND_URL || "",
+].filter(Boolean);
 
 // Socket.io setup
 const io = new SocketServer(server, {
@@ -35,13 +36,14 @@ app.use(
     origin: (origin, callback) => {
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
-        return;
+      } else {
+        callback(new Error("Not allowed by CORS"));
       }
-
-      callback(new Error("Not allowed by CORS"));
     },
+    credentials: true,
   }),
 );
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -59,34 +61,28 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-// Socket.io connection
+// Socket.io
 io.on("connection", (socket) => {
   console.log(`Client connected: ${socket.id}`);
-
   socket.on("join", (userId: string) => {
     socket.join(userId);
-    console.log(`User ${userId} joined their room`);
   });
-
   socket.on("disconnect", () => {
     console.log(`Client disconnected: ${socket.id}`);
   });
 });
 
-// Export io for use in routes later
 export { io };
 
-// Start server
 const PORT = process.env.PORT || 3000;
 
 const startServer = async (): Promise<void> => {
   await connectDB();
   await seedData();
-
   server.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-    console.log(`Socket.io ready`);
-    console.log(`Environment: ${process.env.NODE_ENV}`);
+    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
+    console.log(`✅ Allowed origins: ${allowedOrigins.join(", ")}`);
   });
 };
 

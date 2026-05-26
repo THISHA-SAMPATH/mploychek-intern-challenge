@@ -7,7 +7,7 @@ export class SocketService {
   private socket: Socket;
 
   constructor() {
-    this.socket = io({
+    this.socket = io('https://mploychek-backend.onrender.com', {
       autoConnect: false,
     });
   }
