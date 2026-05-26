@@ -45,7 +45,7 @@
 
           <div class="role-badge" [class]="user()!.role === 'Admin' ? 'admin' : 'user'">
             <mat-icon>{{ user()!.role === 'Admin' ? 'admin_panel_settings' : 'person' }}</mat-icon>
-            {{ user()!.role }}
+            {{ getRoleLabel(user()!.role) }}
           </div>
 
           <mat-divider class="divider"></mat-divider>

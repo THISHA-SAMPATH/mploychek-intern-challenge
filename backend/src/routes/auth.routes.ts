@@ -8,10 +8,17 @@ const router = Router();
 // POST /api/auth/login
 router.post("/login", async (req: Request, res: Response): Promise<void> => {
   try {
-    const { userId, password } = req.body;
+    const { userId, password, role } = req.body;
 
-    if (!userId || !password) {
-      res.status(400).json({ message: "userId and password are required" });
+    if (!userId || !password || !role) {
+      res
+        .status(400)
+        .json({ message: "userId, password and role are required" });
+      return;
+    }
+
+    if (!["Admin", "GeneralUser"].includes(role)) {
+      res.status(400).json({ message: "Invalid role selected" });
       return;
     }
 
@@ -26,6 +33,11 @@ router.post("/login", async (req: Request, res: Response): Promise<void> => {
 
     if (!isMatch) {
       res.status(401).json({ message: "Invalid credentials" });
+      return;
+    }
+
+    if (user.role !== role) {
+      res.status(403).json({ message: "Selected role does not match this user" });
       return;
     }
 

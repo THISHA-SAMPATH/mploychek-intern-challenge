@@ -223,7 +223,8 @@
   font-weight: 500;
   color: #09090b;
 
-  input {
+  input,
+  select {
     width: 100%;
     min-width: 0;
     height: 42px;
@@ -241,7 +242,13 @@
     color: #8a8f98;
   }
 
-  input:focus {
+  select {
+    appearance: none;
+    cursor: pointer;
+  }
+
+  input:focus,
+  select:focus {
     background: #ffffff;
     outline-color: #0f0f10;
   }
@@ -339,10 +346,10 @@
   }
 }
 
-.google-mark {
-  font-size: 20px;
-  font-weight: 800;
-  color: #4285f4;
+.google-btn mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
 }
 
 .demo-login {

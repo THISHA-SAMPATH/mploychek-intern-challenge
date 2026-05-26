@@ -71,4 +71,8 @@ export class ProfileComponent implements OnInit {
     const progress = this.getVerificationProgress(status);
     return this.ringCircumference * (1 - progress / 100);
   }
+
+  getRoleLabel(role: string): string {
+    return role === 'GeneralUser' ? 'General User' : role;
+  }
 }

@@ -80,7 +80,7 @@
             <th mat-header-cell *matHeaderCellDef>Role</th>
             <td mat-cell *matCellDef="let u">
               <span class="role-chip" [class]="u.role === 'Admin' ? 'admin' : 'user'">
-                {{ u.role }}
+                {{ getRoleLabel(u.role) }}
               </span>
             </td>
           </ng-container>

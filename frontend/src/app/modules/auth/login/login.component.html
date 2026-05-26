@@ -40,12 +40,20 @@
 
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
           <label class="field">
-            <span>Email</span>
+            <span>User ID</span>
             <input formControlName="userId" placeholder="Enter your email or user ID" autocomplete="username" />
           </label>
           @if (loginForm.get('userId')?.hasError('required') && loginForm.get('userId')?.touched) {
-            <p class="field-error">Email or user ID is required</p>
+            <p class="field-error">User ID is required</p>
           }
+
+          <label class="field">
+            <span>Role</span>
+            <select formControlName="role" aria-label="Role">
+              <option value="GeneralUser">General User</option>
+              <option value="Admin">Admin</option>
+            </select>
+          </label>
 
           <label class="field password-field">
             <span>Password</span>
@@ -96,8 +104,8 @@
           </button>
 
           <button mat-stroked-button type="button" class="google-btn" (click)="fillDemo('user')">
-            <span class="google-mark" aria-hidden="true">G</span>
-            <span>Sign In with Google</span>
+            <mat-icon>person_search</mat-icon>
+            <span>Fill General User Demo</span>
           </button>
 
           <div class="demo-login">

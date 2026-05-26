@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AuthService } from '../../../core/services/auth.service';
@@ -21,6 +22,7 @@ import { ThemeService } from '../../../core/services/theme.service';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
+    MatSelectModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
   ],
@@ -42,6 +44,7 @@ export class LoginComponent {
     this.loginForm = this.fb.group({
       userId: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(6)]],
+      role: ['GeneralUser', [Validators.required]],
     });
 
     // Redirect if already logged in
@@ -86,9 +89,9 @@ export class LoginComponent {
 
   fillDemo(role: 'admin' | 'user'): void {
     if (role === 'admin') {
-      this.loginForm.patchValue({ userId: 'USR001', password: 'password123' });
+      this.loginForm.patchValue({ userId: 'USR001', password: 'password123', role: 'Admin' });
     } else {
-      this.loginForm.patchValue({ userId: 'USR002', password: 'password123' });
+      this.loginForm.patchValue({ userId: 'USR002', password: 'password123', role: 'GeneralUser' });
     }
   }
 

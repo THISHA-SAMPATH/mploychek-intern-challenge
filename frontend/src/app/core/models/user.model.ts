@@ -21,4 +21,5 @@ export interface AuthResponse {
 export interface LoginCredentials {
   userId: string;
   password: string;
+  role: Role;
 }

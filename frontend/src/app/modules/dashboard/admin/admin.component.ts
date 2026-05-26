@@ -132,4 +132,8 @@ export class AdminComponent implements OnInit {
     };
     return map[status] || '';
   }
+
+  getRoleLabel(role: string): string {
+    return role === 'GeneralUser' ? 'General User' : role;
+  }
 }
