@@ -37,9 +37,14 @@
   }
 
   .logo-text {
-    color: #ffffff;
-    font-size: 19px;
-    font-weight: 800;
+    font-family: 'Outfit', sans-serif;
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #ffffff 40%, #dfba73 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
   }
 }
 
@@ -107,10 +112,11 @@ mat-nav-list {
   box-shadow: none;
 
   .toolbar-title {
-    font-family: 'Inter', 'Roboto', sans-serif;
-    font-size: clamp(17px, 2vw, 22px);
+    font-family: 'Outfit', 'Inter', sans-serif;
+    font-size: clamp(16px, 2vw, 20px);
     font-weight: 700;
-    letter-spacing: 0;
+    letter-spacing: -0.015em;
+    color: #0f172a;
   }
 
   .spacer {
@@ -145,6 +151,10 @@ mat-nav-list {
     color: #f8fafc;
     border-bottom-color: rgba(255, 255, 255, 0.08);
     background: rgba(12, 12, 14, 0.86);
+
+    .toolbar-title {
+      color: #ffffff !important;
+    }
   }
 
   .content {

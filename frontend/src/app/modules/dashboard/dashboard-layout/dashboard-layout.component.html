@@ -35,7 +35,7 @@
   <mat-sidenav-content>
     <mat-toolbar class="toolbar">
       <span class="toolbar-title">
-        Welcome, {{ authService.currentUser()?.name }}
+        {{ getGreeting() }}, {{ authService.currentUser()?.name }}
       </span>
       <span class="spacer"></span>
 

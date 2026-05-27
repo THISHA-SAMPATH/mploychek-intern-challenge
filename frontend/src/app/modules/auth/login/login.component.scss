@@ -3,7 +3,239 @@
   min-height: 100vh;
 }
 
+.page-wrapper {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #000000;
+  font-family: 'Inter', sans-serif;
+}
+
+
+/* Snapping scroll container */
+.scroll-container {
+  position: relative;
+  z-index: 2;
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none; // Firefox
+  &::-webkit-scrollbar {
+    display: none; // Chrome, Safari
+  }
+}
+
+/* Base style for each full-screen slide */
+.scroll-slide {
+  height: 100vh;
+  width: 100vw;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* Slide 1: 3D Blob + Entry Branding */
+.intro-slide {
+  padding: 24px;
+  text-align: center;
+  background: transparent;
+}
+
+.spline-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: hidden;
+  background: #000000;
+  transition: all 1.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.spline-background {
+  position: absolute;
+  top: -90px;
+  left: -90px;
+  width: calc(100% + 180px);
+  height: calc(100% + 180px);
+  border: none;
+  background: #000000;
+  pointer-events: auto;
+}
+
+.page-transitioning .spline-wrapper {
+  transform: scale(1.15);
+  opacity: 0;
+  filter: blur(15px);
+}
+
+.intro-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 5;
+  margin-top: -3vh; /* Push words slightly above center */
+  transition: all 1.6s cubic-bezier(0.25, 1, 0.5, 1);
+
+  .logo-svg {
+    width: clamp(100px, 15vw, 130px);
+    height: clamp(100px, 15vw, 130px);
+    opacity: 0;
+    transform: scale(0.4) rotate(-45deg);
+    transition: all 1.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .ring-outer {
+    transform-origin: center;
+    animation: pulse-ring 4s ease-in-out infinite;
+  }
+
+  .ring-inner {
+    transform-origin: center;
+    animation: rotate-dash 15s linear infinite;
+  }
+
+  .core {
+    transform-origin: center;
+    animation: pulse-core 3s ease-in-out infinite alternate;
+  }
+
+  .brand-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(3rem, 7vw, 4.5rem);
+    font-weight: 900;
+    letter-spacing: -2px;
+    margin: 20px 0 0 0;
+    background: linear-gradient(135deg, #ffffff 30%, #abb5d4 70%, #9dacce 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.3s;
+  }
+
+  .brand-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(0.8rem, 1.8vw, 0.95rem);
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 4px;
+    margin: 12px 0 0;
+    text-transform: uppercase;
+    font-weight: 500;
+    opacity: 0;
+    transition: opacity 1.8s cubic-bezier(0.16, 1, 0.3, 1) 0.8s;
+  }
+
+  // Triggered states
+  &.show {
+    .logo-svg {
+      opacity: 1;
+      transform: scale(1) rotate(0deg);
+    }
+    .brand-title {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .brand-subtitle {
+      opacity: 1;
+    }
+  }
+}
+
+.page-transitioning .intro-content {
+  transform: scale(3.5) rotate(12deg) translateY(-20px);
+  opacity: 0;
+  filter: blur(10px);
+}
+
+/* Mouse Scroll Indicator */
+.scroll-indicator {
+  position: absolute;
+  bottom: 5vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 500;
+  transition: color 0.3s, transform 0.3s;
+  animation: text-fade-in-indicator 2s ease-in 1.4s forwards;
+  opacity: 0;
+  z-index: 10;
+
+  &:hover {
+    color: #ffffff;
+    transform: translateY(2px);
+  }
+}
+
+.scroll-text {
+  margin-bottom: 8px;
+}
+
+.scroll-mouse {
+  width: 22px;
+  height: 36px;
+  border: 2px solid currentColor;
+  border-radius: 12px;
+  position: relative;
+}
+
+.scroll-wheel {
+  width: 4px;
+  height: 8px;
+  background-color: currentColor;
+  border-radius: 2px;
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: scroll-wheel-anim 1.6s ease-in-out infinite;
+}
+
+.scroll-arrow {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  margin-top: 6px;
+  animation: bounce-arrow 1.6s ease-in-out infinite;
+}
+
+/* Slide 2: Original Login Page Container overrides */
+.login-slide {
+  overflow: hidden;
+  background: transparent;
+  
+  .auth-page {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+  }
+}
+
+@keyframes text-fade-in-indicator{0%{opacity:0}100%{opacity:1}}
+@keyframes pulse-ring{0%,100%{transform:scale(1);opacity:0.8}50%{transform:scale(1.04);opacity:0.55}}
+@keyframes rotate-dash{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+@keyframes pulse-core{0%{transform:scale(0.92);opacity:0.85}100%{transform:scale(1.08);opacity:1}}
+@keyframes scroll-wheel-anim{0%{transform:translate(-50%,0);opacity:1}40%{transform:translate(-50%,8px);opacity:0.4}80%,100%{transform:translate(-50%,0);opacity:1}}
+@keyframes bounce-arrow{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+
+
 .auth-page {
+  position: relative;
   min-height: 100vh;
   display: grid;
   place-items: center;
@@ -19,23 +251,17 @@
 .auth-page::before,
 .auth-page::after {
   content: '';
-  position: fixed;
+  position: absolute;
   pointer-events: none;
   width: 120vw;
   height: 34vh;
   left: -10vw;
   border-radius: 50%;
   filter: blur(1px);
-  opacity: 0.95;
-  transform: rotate(12deg);
-  background:
-    repeating-linear-gradient(
-      178deg,
-      transparent 0 17px,
-      rgba(255, 255, 255, 0.1) 18px 19px,
-      transparent 20px 34px
-    ),
-    linear-gradient(90deg, #1617a8 0%, #129ef0 24%, #db1ac0 58%, #ff2757 100%);
+  opacity: 0;
+  transform: rotate(12deg) translateY(60px);
+  transition: all 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s;
+  background: linear-gradient(90deg, #1617a8 0%, #129ef0 24%, #db1ac0 58%, #ff2757 100%);
 }
 
 .auth-page::before {
@@ -45,9 +271,19 @@
 
 .auth-page::after {
   bottom: -3vh;
-  transform: rotate(-8deg);
-  opacity: 0.72;
+  transform: rotate(-8deg) translateY(60px);
+  opacity: 0;
   clip-path: polygon(0 42%, 34% 19%, 70% 45%, 100% 25%, 100% 68%, 72% 86%, 35% 62%, 0 78%);
+}
+
+.page-transitioning .auth-page::before {
+  opacity: 0.95;
+  transform: rotate(12deg) translateY(0);
+}
+
+.page-transitioning .auth-page::after {
+  opacity: 0.72;
+  transform: rotate(-8deg) translateY(0);
 }
 
 .auth-shell {
@@ -61,6 +297,17 @@
   border-radius: 34px;
   box-shadow: 0 34px 90px rgba(0, 0, 0, 0.38);
   overflow: hidden;
+  
+  // Premium Entrance State
+  opacity: 0;
+  transform: scale(0.93) translateY(50px);
+  transition: all 1.4s cubic-bezier(0.34, 1.56, 0.64, 1); // premium spring ease
+}
+
+.page-transitioning .auth-shell {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  transition-delay: 0.35s; /* Wait slightly for scroll snap to begin */
 }
 
 .quote-panel {
@@ -89,15 +336,7 @@
   inset: -18% -12%;
   pointer-events: none;
   transform: rotate(9deg);
-  background:
-    repeating-linear-gradient(
-      176deg,
-      transparent 0 24px,
-      rgba(255, 255, 255, 0.17) 25px 26px,
-      rgba(3, 8, 16, 0.44) 27px 30px,
-      transparent 31px 54px
-    ),
-    linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.22) 43%, transparent 84%);
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.22) 43%, transparent 84%);
   mix-blend-mode: screen;
 }
 
@@ -132,21 +371,93 @@
 .quote-copy {
   max-width: 440px;
 
-  h2 {
+  .animate-text-reveal {
     margin: 0 0 18px;
-    font-family: Georgia, 'Times New Roman', serif;
-    font-size: clamp(44px, 5vw, 68px);
-    font-weight: 400;
     line-height: 0.92;
-    letter-spacing: 0;
+    overflow: hidden;
+    cursor: pointer;
+    user-select: none;
+    outline: none;
+    
+    &.quote-clicked {
+      animation: click-pulse-glow 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .word {
+      display: inline-block;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(44px, 5vw, 68px);
+      font-weight: 400;
+      letter-spacing: 0;
+      opacity: 0;
+      transform: translateY(100%) skewY(6deg);
+      transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+      
+      // Beautiful subtle gold sheen reflection hover
+      &:hover {
+        background: linear-gradient(90deg, #ffffff, #dfba73, #ffffff);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: shine-sheen 1.5s linear infinite;
+      }
+    }
+
+    .word-1 {
+      transition-delay: 0.5s;
+    }
+
+    .word-2 {
+      transition-delay: 0.75s;
+    }
   }
 
-  p {
+  .typewriter-quote {
     max-width: 390px;
     margin: 0;
     color: rgba(255, 255, 255, 0.88);
     font-size: 14px;
     line-height: 1.65;
+    min-height: 90px; /* Prevent height collapse during typing */
+  }
+
+  .typing-cursor {
+    display: inline-block;
+    margin-left: 3px;
+    color: #dfba73;
+    font-weight: 700;
+    animation: blink-cursor-caret 0.8s step-end infinite;
+  }
+}
+
+// When transitioning starts and Slide 2 reveals
+.page-transitioning .animate-text-reveal .word {
+  opacity: 1;
+  transform: translateY(0) skewY(0deg);
+}
+
+@keyframes shine-sheen {
+  0% { background-position: 0% 50% }
+  100% { background-position: 200% 50% }
+}
+
+@keyframes blink-cursor-caret {
+  from, to { color: transparent }
+  50% { color: #dfba73 }
+}
+
+@keyframes click-pulse-glow {
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  30% {
+    transform: scale(1.04) skewX(-2deg);
+    filter: brightness(1.28);
+  }
+  100% {
+    transform: scale(1) skewX(0);
+    filter: brightness(1);
   }
 }
 
@@ -454,3 +765,6 @@
     margin: 48px 0 38px;
   }
 }
+
+
+

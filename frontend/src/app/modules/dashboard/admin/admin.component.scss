@@ -368,19 +368,7 @@
   }
 }
 
-:host ::ng-deep {
-  .admin-tabs .mat-mdc-tab-header {
-    border-bottom: 1px solid rgba(24, 24, 27, 0.08);
-  }
 
-  .admin-tabs .mdc-tab__text-label {
-    font-weight: 800;
-  }
-
-  .admin-tabs .mdc-tab-indicator__content--underline {
-    border-color: #d91a75 !important;
-  }
-}
 
 .users-table,
 .audit-table {

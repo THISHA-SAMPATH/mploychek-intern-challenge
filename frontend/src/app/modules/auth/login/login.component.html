@@ -1,130 +1,184 @@
-<main class="auth-page">
-  <section class="auth-shell">
-    <aside class="quote-panel" aria-label="Motivational quote">
-      <div class="quote-top">
-        <span>A Wise Quote</span>
-        <i aria-hidden="true"></i>
+<main class="page-wrapper" [class.page-transitioning]="isTransitioning()">
+
+  <div class="scroll-container">
+    <!-- Slide 1: 3D Splash Intro -->
+    <section class="scroll-slide intro-slide" id="intro-section">
+      <!-- Spline 3D Clarity Stream Wrapper to Hide Logo Watermark -->
+      <div class="spline-wrapper">
+        <iframe 
+          src="https://my.spline.design/claritystream-ZzjBMMtjecyYDYQz80fMsGNI/" 
+          class="spline-background"
+          title="Spline 3D Scene">
+        </iframe>
       </div>
 
-      <div class="quote-copy">
-        <h2>Trust,<br />but verify.</h2>
-        <p>
-          The true measure of any system is its ability to build certainty out of complexity,
-          ensuring that trust is not a gamble, but a solid foundation upon which human potential
-          can be safely recognized.
-        </p>
-      </div>
-    </aside>
-
-    <section class="signin-panel" aria-label="Sign in">
-      <button
-        mat-icon-button
-        type="button"
-        class="theme-button"
-        (click)="toggleTheme()"
-        aria-label="Toggle theme"
-      >
-        <mat-icon>{{ isDarkTheme() ? 'light_mode' : 'dark_mode' }}</mat-icon>
-      </button>
-
-      <div class="brand">
-        <span class="brand-mark" aria-hidden="true"></span>
-        <span>MPloyChek</span>
+      <div class="intro-content" [class.show]="showLogo()">
+        <div class="brand-logo-logo">
+          <svg viewBox="0 0 100 100" class="logo-svg">
+            <defs>
+              <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FFFFFF" />
+                <stop offset="50%" stop-color="#FFFFFF" />
+                <stop offset="100%" stop-color="#FFFFFF" />
+              </linearGradient>
+            </defs>
+            <circle cx="50" cy="50" r="32" stroke="url(#logo-grad)" stroke-width="4" fill="none" class="ring-outer" />
+            <circle cx="50" cy="50" r="20" stroke="url(#logo-grad)" stroke-width="2" stroke-dasharray="8, 4" fill="none" class="ring-inner" />
+            <circle cx="50" cy="50" r="8" fill="url(#logo-grad)" class="core" />
+          </svg>
+        </div>
+        <h1 class="brand-title">MPloyChek</h1>
+        <p class="brand-subtitle">Smart Background Verification & Identity Trust</p>
       </div>
 
-      <div class="signin-content">
-        <header class="signin-header">
-          <h1>Welcome Back</h1>
-          <p>Enter your email and password to access your account</p>
-        </header>
-
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
-          <label class="field">
-            <span>User ID</span>
-            <input formControlName="userId" placeholder="Enter your email or user ID" autocomplete="username" />
-          </label>
-          @if (loginForm.get('userId')?.hasError('required') && loginForm.get('userId')?.touched) {
-            <p class="field-error">User ID is required</p>
-          }
-
-          <label class="field">
-            <span>Role</span>
-            <select formControlName="role" aria-label="Role">
-              <option value="GeneralUser">General User</option>
-              <option value="Admin">Admin</option>
-            </select>
-          </label>
-
-          <label class="field password-field">
-            <span>Password</span>
-            <span class="password-control">
-              <input
-                formControlName="password"
-                [type]="hidePassword() ? 'password' : 'text'"
-                placeholder="Enter your password"
-                autocomplete="current-password"
-              />
-              <button
-                mat-icon-button
-                type="button"
-                (click)="hidePassword.set(!hidePassword())"
-                aria-label="Show or hide password"
-              >
-                <mat-icon>{{ hidePassword() ? 'visibility' : 'visibility_off' }}</mat-icon>
-              </button>
-            </span>
-          </label>
-          @if (loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched) {
-            <p class="field-error">Password is required</p>
-          }
-          @if (loginForm.get('password')?.hasError('minlength') && loginForm.get('password')?.touched) {
-            <p class="field-error">Password must be at least 6 characters</p>
-          }
-
-          <div class="form-options">
-            <label class="remember">
-              <input type="checkbox" />
-              <span>Remember me</span>
-            </label>
-            <a href="#" aria-label="Forgot password">Forgot Password</a>
-          </div>
-
-          <button
-            mat-flat-button
-            type="submit"
-            class="submit-btn"
-            [disabled]="loginForm.invalid || isLoading()"
-          >
-            @if (isLoading()) {
-              <mat-spinner diameter="18"></mat-spinner>
-              <span>Signing in...</span>
-            } @else {
-              <span>Sign In</span>
-            }
-          </button>
-
-          <button mat-stroked-button type="button" class="google-btn" (click)="fillDemo('user')">
-            <mat-icon>person_search</mat-icon>
-            <span>Fill General User Demo</span>
-          </button>
-
-          <div class="demo-login">
-            <span>Demo login</span>
-            <div class="demo-actions">
-              <button mat-stroked-button type="button" (click)="loginAsDemo('admin')" [disabled]="isLoading()">
-                <mat-icon>admin_panel_settings</mat-icon>
-                Admin
-              </button>
-              <button mat-stroked-button type="button" (click)="loginAsDemo('user')" [disabled]="isLoading()">
-                <mat-icon>person</mat-icon>
-                User
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-
-      <p class="signup-copy">Don't have an account? <button type="button" (click)="fillDemo('admin')">Sign Up</button></p>
+      <!-- Skip Intro scrolling indicator -->
+      <a href="#" class="scroll-indicator" (click)="scrollToLogin($event)" aria-label="Skip to Login">
+        <span class="scroll-text">Skip Intro</span>
+        <div class="scroll-mouse">
+          <div class="scroll-wheel"></div>
+        </div>
+        <mat-icon class="scroll-arrow">keyboard_arrow_down</mat-icon>
+      </a>
     </section>
-  </section>
+
+    <!-- Slide 2: Your Original Login Page (100% Unchanged) -->
+    <section class="scroll-slide login-slide" id="login-section">
+      <main class="auth-page">
+        <section class="auth-shell">
+          <aside class="quote-panel" aria-label="Motivational quote">
+            <div class="quote-top">
+              <span>A Wise Quote</span>
+              <i aria-hidden="true"></i>
+            </div>
+
+            <div class="quote-copy">
+              <h2 class="animate-text-reveal" 
+                  (click)="triggerInteractiveQuote()" 
+                  [class.quote-clicked]="isQuotePulseActive()" 
+                  role="button" 
+                  tabindex="0" 
+                  aria-label="Replay quote typing animation">
+                <span class="word word-1">Trust,</span><br />
+                <span class="word word-2">but verify.</span>
+              </h2>
+              <p class="typewriter-quote">
+                {{ typedQuote() }}@if (!isTypingComplete()) {<span class="typing-cursor">|</span>}
+              </p>
+            </div>
+          </aside>
+
+          <section class="signin-panel" aria-label="Sign in">
+            <button
+              mat-icon-button
+              type="button"
+              class="theme-button"
+              (click)="toggleTheme()"
+              aria-label="Toggle theme"
+            >
+              <mat-icon>{{ isDarkTheme() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+            </button>
+
+            <div class="brand">
+              <span class="brand-mark" aria-hidden="true"></span>
+              <span>MPloyChek</span>
+            </div>
+
+            <div class="signin-content">
+              <header class="signin-header">
+                <h1>Welcome Back</h1>
+                <p>Enter your email and password to access your account</p>
+              </header>
+
+              <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+                <label class="field">
+                  <span>User ID</span>
+                  <input formControlName="userId" placeholder="Enter your email or user ID" autocomplete="username" />
+                </label>
+                @if (loginForm.get('userId')?.hasError('required') && loginForm.get('userId')?.touched) {
+                  <p class="field-error">User ID is required</p>
+                }
+
+                <label class="field">
+                  <span>Role</span>
+                  <select formControlName="role" aria-label="Role">
+                    <option value="GeneralUser">General User</option>
+                    <option value="Admin">Admin</option>
+                  </select>
+                </label>
+
+                <label class="field password-field">
+                  <span>Password</span>
+                  <span class="password-control">
+                    <input
+                      formControlName="password"
+                      [type]="hidePassword() ? 'password' : 'text'"
+                      placeholder="Enter your password"
+                      autocomplete="current-password"
+                    />
+                    <button
+                      mat-icon-button
+                      type="button"
+                      (click)="hidePassword.set(!hidePassword())"
+                      aria-label="Show or hide password"
+                    >
+                      <mat-icon>{{ hidePassword() ? 'visibility' : 'visibility_off' }}</mat-icon>
+                    </button>
+                  </span>
+                </label>
+                @if (loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched) {
+                  <p class="field-error">Password is required</p>
+                }
+                @if (loginForm.get('password')?.hasError('minlength') && loginForm.get('password')?.touched) {
+                  <p class="field-error">Password must be at least 6 characters</p>
+                }
+
+                <div class="form-options">
+                  <label class="remember">
+                    <input type="checkbox" />
+                    <span>Remember me</span>
+                  </label>
+                  <a href="#" aria-label="Forgot password">Forgot Password</a>
+                </div>
+
+                <button
+                  mat-flat-button
+                  type="submit"
+                  class="submit-btn"
+                  [disabled]="loginForm.invalid || isLoading()"
+                >
+                  @if (isLoading()) {
+                    <mat-spinner diameter="18"></mat-spinner>
+                    <span>Signing in...</span>
+                  } @else {
+                    <span>Sign In</span>
+                  }
+                </button>
+
+                <button mat-stroked-button type="button" class="google-btn" (click)="fillDemo('user')">
+                  <mat-icon>person_search</mat-icon>
+                  <span>Fill General User Demo</span>
+                </button>
+
+                <div class="demo-login">
+                  <span>Demo login</span>
+                  <div class="demo-actions">
+                    <button mat-stroked-button type="button" (click)="loginAsDemo('admin')" [disabled]="isLoading()">
+                      <mat-icon>admin_panel_settings</mat-icon>
+                      Admin
+                    </button>
+                    <button mat-stroked-button type="button" (click)="loginAsDemo('user')" [disabled]="isLoading()">
+                      <mat-icon>person</mat-icon>
+                      User
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            <p class="signup-copy">Don't have an account? <button type="button" (click)="fillDemo('admin')">Sign Up</button></p>
+          </section>
+        </section>
+      </main>
+    </section>
+  </div>
 </main>
