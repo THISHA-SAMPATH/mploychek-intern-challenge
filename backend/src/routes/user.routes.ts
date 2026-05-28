@@ -91,7 +91,14 @@ router.post(
           role: user.role,
         },
       });
-    } catch (error) {
+    } catch (error: any) {
+      if (error.code === 11000) {
+        const field = Object.keys(error.keyPattern || {})[0] || "field";
+        res.status(400).json({
+          message: `A user with this ${field} already exists`,
+        });
+        return;
+      }
       res.status(500).json({ message: "Server error", error });
     }
   },
